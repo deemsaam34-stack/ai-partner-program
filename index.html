@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Partner Program — 1XBET Serbia</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0a0a0f;
+  --bg-card: #12121a;
+  --bg-card-hover: #181825;
+  --border: #1e1e2e;
+  --border-accent: #2a2a3e;
+  --text-primary: #e8e6f0;
+  --text-secondary: #8b879e;
+  --text-muted: #5a5670;
+  --accent: #7c5bf5;
+  --accent-glow: #9d7cff;
+  --accent-soft: rgba(124,91,245,0.12);
+  --green: #34d399;
+  --green-glow: #6ee7b7;
+  --green-soft: rgba(52,211,153,0.1);
+  --amber: #fbbf24;
+  --amber-soft: rgba(251,191,36,0.1);
+  --red: #f87171;
+  --red-soft: rgba(248,113,113,0.1);
+  --blue: #60a5fa;
+  --blue-soft: rgba(96,165,250,0.1);
+  --radius: 14px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg-deep);color:var(--text-primary);font-family:'Onest',sans-serif;font-size:14px;line-height:1.65;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 40% at 70% 10%,rgba(124,91,245,0.08) 0%,transparent 60%),radial-gradient(ellipse 40% 30% at 20% 80%,rgba(52,211,153,0.05) 0%,transparent 50%);pointer-events:none;z-index:0}
+.wrapper{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:44px 20px 80px}
+
+/* PROGRESS */
+.progress-wrap{position:sticky;top:12px;z-index:100;background:var(--bg-card);border:1px solid var(--border);border-radius:99px;overflow:visible;margin-bottom:44px;backdrop-filter:blur(16px);height:8px}
+.progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:99px;transition:width .5s cubic-bezier(.34,1.56,.64,1)}
+.progress-label{position:absolute;right:0;top:-22px;font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--text-muted);font-weight:600;letter-spacing:1px}
+
+/* LANG SWITCH */
+.lang-switch{position:fixed;top:16px;right:20px;z-index:200;display:flex;gap:4px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:4px}
+.lang-btn{background:none;border:none;color:var(--text-muted);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1px;padding:5px 10px;border-radius:7px;cursor:pointer;transition:all .2s}
+.lang-btn.active{background:var(--accent-soft);color:var(--accent-glow)}
+.lang-btn:hover:not(.active){background:rgba(255,255,255,0.04);color:var(--text-secondary)}
+
+/* HEADER */
+.header{margin-bottom:36px}
+.header__badge{display:inline-flex;align-items:center;gap:8px;background:var(--accent-soft);border:1px solid rgba(124,91,245,0.3);border-radius:99px;padding:6px 14px;font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:1.5px;color:var(--accent-glow);text-transform:uppercase;margin-bottom:20px;animation:fadeDown .6s .1s ease both}
+.header__title{font-size:clamp(26px,5vw,40px);font-weight:800;line-height:1.15;margin-bottom:14px;animation:fadeDown .6s .2s ease both}
+.header__title span{background:linear-gradient(135deg,var(--accent-glow),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header__sub{color:var(--text-secondary);font-size:15px;max-width:580px;line-height:1.6;margin-bottom:24px;animation:fadeDown .6s .3s ease both}
+.header__meta{display:flex;flex-wrap:wrap;gap:20px;animation:fadeDown .6s .4s ease both}
+.header__meta-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-secondary);font-family:'JetBrains Mono',monospace}
+.header__meta-item b{color:var(--text-muted)}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:36px}
+.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 16px;transition:border-color .3s,background .2s}
+.stat-card:hover{border-color:var(--border-accent);background:var(--bg-card-hover)}
+.stat-card__value{font-size:30px;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--accent-glow);line-height:1;margin-bottom:6px}
+.stat-card__value.g{color:var(--green)}
+.stat-card__value.a{color:var(--amber)}
+.stat-card__label{font-size:12px;color:var(--text-secondary);line-height:1.4}
+
+/* SECTIONS */
+.section{margin-bottom:28px}
+.section__header{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.section__num{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;flex-shrink:0}
+.section__title{font-size:16px;font-weight:700;color:var(--text-primary)}
+.section__badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:99px;font-size:10px;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-left:auto;flex-shrink:0}
+.badge--done{background:var(--green-soft);color:var(--green);border:1px solid rgba(52,211,153,0.25)}
+.badge--active{background:var(--accent-soft);color:var(--accent-glow);border:1px solid rgba(124,91,245,0.25)}
+.badge--planned{background:rgba(90,86,112,0.12);color:var(--text-muted);border:1px solid var(--border)}
+.badge--blue{background:var(--blue-soft);color:var(--blue);border:1px solid rgba(96,165,250,0.25)}
+.badge--amber{background:var(--amber-soft);color:var(--amber);border:1px solid rgba(251,191,36,0.25)}
+.section__card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);transition:border-color .3s;overflow:hidden}
+.section__card:hover{border-color:var(--border-accent)}
+.section__desc{padding:14px 18px;border-bottom:1px solid var(--border);color:var(--text-secondary);font-size:13px;line-height:1.6}
+.section__period{padding:8px 18px;border-bottom:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:0.5px;display:flex;align-items:center;gap:8px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.dot.g{background:var(--green)}
+.dot.a{background:var(--amber)}
+.dot.b{background:var(--blue)}
+
+/* CHECKLIST */
+.item{display:flex;align-items:flex-start;gap:14px;padding:13px 18px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s;user-select:none}
+.item:last-child{border-bottom:none}
+.item:hover{background:rgba(255,255,255,0.02)}
+.item.checked{background:rgba(52,211,153,0.04)}
+.item__cb{flex-shrink:0;width:22px;height:22px;border:2px solid var(--border-accent);border-radius:7px;display:flex;align-items:center;justify-content:center;transition:all .25s cubic-bezier(.34,1.56,.64,1);margin-top:1px}
+.item.checked .item__cb{background:var(--green);border-color:var(--green)}
+.item__ck{opacity:0;transform:scale(0);transition:all .25s cubic-bezier(.34,1.56,.64,1)}
+.item.checked .item__ck{opacity:1;transform:scale(1)}
+.item__content{flex:1;min-width:0}
+.item__text{font-size:14.5px;font-weight:500;color:var(--text-primary);transition:color .2s;line-height:1.4}
+.item.checked .item__text{color:var(--text-muted);text-decoration:line-through;text-decoration-color:var(--text-muted)}
+.item__sub{font-size:12px;color:var(--text-muted);margin-top:3px;line-height:1.5}
+.item__tag{display:inline-block;font-size:10px;font-family:'JetBrains Mono',monospace;font-weight:600;padding:2px 7px;border-radius:5px;margin-top:5px;letter-spacing:0.5px}
+.tag--p{background:var(--accent-soft);color:var(--accent-glow)}
+.tag--g{background:var(--green-soft);color:var(--green-glow)}
+.tag--a{background:var(--amber-soft);color:var(--amber)}
+.tag--b{background:var(--blue-soft);color:var(--blue)}
+
+/* NOTES */
+.note{display:flex;gap:12px;padding:12px 18px;border-top:1px solid var(--border);font-size:13px;line-height:1.6}
+.note--info{background:var(--accent-soft);color:var(--accent-glow)}
+.note--green{background:var(--green-soft);color:var(--green-glow)}
+.note--warn{background:var(--amber-soft);color:var(--amber)}
+.note--muted{color:var(--text-secondary)}
+.note__icon{flex-shrink:0;font-size:15px}
+
+/* GANTT */
+.gantt-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.gantt{min-width:700px}
+.gantt__head{display:flex;margin-left:180px;margin-bottom:6px;position:relative}
+.gantt__month{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:1.2px;color:var(--text-muted);text-transform:uppercase;text-align:center;flex-shrink:0;padding-bottom:5px;border-bottom:1px solid var(--border)}
+.gantt__group-label{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--text-muted);text-transform:uppercase;margin:8px 0 3px 180px}
+.gantt__row{display:flex;align-items:center;padding:2px 0}
+.gantt__lbl{width:180px;flex-shrink:0;font-size:11.5px;color:var(--text-secondary);padding-right:12px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gantt__track{flex:1;height:28px;position:relative}
+.gantt__track-bg{position:absolute;inset:0;pointer-events:none}
+.gantt__vl{position:absolute;top:0;bottom:0;width:1px;background:var(--border);opacity:0.45}
+.gantt__bar{position:absolute;height:22px;top:3px;border-radius:5px;display:flex;align-items:center;padding:0 8px;font-size:9.5px;font-weight:600;white-space:nowrap;overflow:hidden;font-family:'JetBrains Mono',monospace;letter-spacing:0.5px;transition:filter .2s, opacity .2s;cursor:default}
+.gantt__bar:hover{filter:brightness(1.2)}
+.bar--ph0{background:linear-gradient(90deg,rgba(52,211,153,0.25),rgba(52,211,153,0.14));border:1px solid rgba(52,211,153,0.35);color:var(--green)}
+.bar--ph1{background:linear-gradient(90deg,rgba(124,91,245,0.4),rgba(124,91,245,0.22));border:1px solid rgba(124,91,245,0.45);color:var(--accent-glow)}
+.bar--ph2{background:linear-gradient(90deg,rgba(96,165,250,0.38),rgba(96,165,250,0.2));border:1px solid rgba(96,165,250,0.4);color:var(--blue)}
+.bar--ph3{background:linear-gradient(90deg,rgba(251,191,36,0.32),rgba(251,191,36,0.16));border:1px solid rgba(251,191,36,0.38);color:var(--amber)}
+.gantt__today{position:absolute;top:0;bottom:0;width:2px;background:var(--red);opacity:0.7;z-index:10;border-radius:2px}
+.gantt__today::before{content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:8px;height:8px;background:var(--red);border-radius:50%}
+.gantt-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.gantt-legend__item{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text-secondary);font-family:'JetBrains Mono',monospace}
+.gantt-legend__dot{width:12px;height:10px;border-radius:3px;flex-shrink:0}
+
+/* ARCHITECTURE */
+.arch-levels{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.arch-level{background:rgba(255,255,255,0.025);border:1px solid var(--border-accent);border-radius:10px;padding:14px}
+.arch-level__head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.arch-level__num{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;flex-shrink:0}
+.lv1{background:var(--accent-soft);color:var(--accent-glow)}
+.lv2{background:var(--blue-soft);color:var(--blue)}
+.lv3{background:var(--green-soft);color:var(--green)}
+.arch-level__title{font-size:14px;font-weight:700}
+.arch-level__sub{font-size:12px;color:var(--text-secondary);margin-bottom:10px;line-height:1.5}
+.arch-modules{display:flex;flex-wrap:wrap;gap:6px}
+.arch-module{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:7px;padding:5px 10px;font-size:11.5px;color:var(--text-secondary)}
+
+/* SEGMENTS */
+.seg-grid{display:grid;grid-template-columns:1fr 1fr;background:var(--border);gap:1px}
+@media(max-width:500px){.seg-grid{grid-template-columns:1fr}}
+.seg-card{background:var(--bg-card);padding:16px;transition:background .2s}
+.seg-card:hover{background:var(--bg-card-hover)}
+.seg-card__icon{font-size:24px;margin-bottom:8px}
+.seg-card__name{font-size:13.5px;font-weight:700;margin-bottom:4px}
+.seg-card__model{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--accent-glow);text-transform:uppercase;margin-bottom:6px}
+.seg-card__desc{font-size:12px;color:var(--text-secondary);line-height:1.5}
+.seg-card:last-child:nth-child(odd){grid-column:1/-1}
+
+/* ENTITIES */
+.entities-list{padding:14px 18px;display:flex;flex-wrap:wrap;gap:8px}
+.entity-tag{background:rgba(255,255,255,0.04);border:1px solid var(--border-accent);border-radius:8px;padding:7px 12px;font-size:12.5px;color:var(--text-secondary);display:flex;align-items:center;gap:7px;transition:border-color .2s,background .2s}
+.entity-tag:hover{border-color:var(--accent);background:var(--accent-soft);color:var(--text-primary)}
+.entity-tag span{font-size:14px}
+
+/* RESET BTN */
+.btn-reset{background:none;border:1px solid var(--border-accent);color:var(--text-muted);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:1px;padding:8px 18px;border-radius:8px;cursor:pointer;transition:all .2s;display:block;margin:20px auto 0;text-transform:uppercase}
+.btn-reset:hover{border-color:var(--red);color:var(--red)}
+
+/* CELEBRATION */
+.celebration{display:none;background:var(--green-soft);border:1px solid rgba(52,211,153,0.3);border-radius:var(--radius);padding:28px;text-align:center;margin-top:28px;animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both}
+.celebration.visible{display:block}
+.celebration__icon{font-size:44px;margin-bottom:12px}
+.celebration__title{font-size:22px;font-weight:800;color:var(--green);margin-bottom:8px}
+.celebration__sub{font-size:13.5px;color:var(--text-secondary)}
+
+/* FOOTER */
+.footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11.5px;color:var(--text-muted);font-family:'JetBrains Mono',monospace}
+
+/* ANIMATIONS */
+@keyframes fadeDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+
+/* MOBILE */
+@media(max-width:480px){
+  .wrapper{padding:28px 14px 60px}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .gantt{min-width:600px}
+  .gantt__lbl{width:140px;font-size:11px}
+  .gantt__head{margin-left:140px}
+  .gantt__group-label{margin-left:140px}
+  .lang-switch{top:10px;right:12px}
+}
+</style>
+</head>
+<body>
+
+<canvas id="confetti-canvas" style="position:fixed;inset:0;pointer-events:none;z-index:9999"></canvas>
+
+<div class="lang-switch">
+  <button class="lang-btn active" data-lang="ru" onclick="setLang('ru')">RU</button>
+  <button class="lang-btn" data-lang="sr" onclick="setLang('sr')">SR</button>
+</div>
+
+<div class="wrapper">
+
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progress-bar"></div>
+    <div class="progress-label" id="progress-label">0%</div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header" style="animation:fadeDown .6s ease both">
+    <div class="header__badge">🤖 <span data-i18n="badge"></span></div>
+    <h1 class="header__title">AI Partner Program — <span>1XBET Serbia</span></h1>
+    <p class="header__sub" data-i18n="header_sub"></p>
+    <div class="header__meta">
+      <div class="header__meta-item"><b>▸</b> <span data-i18n="meta_start"></span></div>
+      <div class="header__meta-item"><b>▸</b> <span data-i18n="meta_finish"></span></div>
+      <div class="header__meta-item"><b>▸</b> <span data-i18n="meta_team"></span></div>
+      <div class="header__meta-item"><b>▸</b> <span data-i18n="meta_client"></span></div>
+    </div>
+  </header>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-card__value">3</div><div class="stat-card__label" data-i18n="stat1"></div></div>
+    <div class="stat-card"><div class="stat-card__value g">17</div><div class="stat-card__label" data-i18n="stat2"></div></div>
+    <div class="stat-card"><div class="stat-card__value">6</div><div class="stat-card__label" data-i18n="stat3"></div></div>
+    <div class="stat-card"><div class="stat-card__value a">5</div><div class="stat-card__label" data-i18n="stat4"></div></div>
+    <div class="stat-card"><div class="stat-card__value g">8</div><div class="stat-card__label" data-i18n="stat5"></div></div>
+    <div class="stat-card"><div class="stat-card__value">~6</div><div class="stat-card__label" data-i18n="stat6"></div></div>
+  </div>
+
+  <!-- SECTION 00: ABOUT -->
+  <div class="section">
+    <div class="section__header">
+      <span class="section__num">00</span>
+      <span class="section__title" data-i18n="s00_title"></span>
+      <span class="section__badge badge--active" data-i18n="s00_badge"></span>
+    </div>
+    <div class="section__card">
+      <div class="section__desc" data-i18n="s00_desc"></div>
+      <div class="note note--info"><span class="note__icon">💡</span><span data-i18n="s00_note"></span></div>
+      <div class="note note--muted" style="border-top:1px solid var(--border)"><span class="note__icon">⚡</span><span data-i18n="s00_note2"></span></div>
+    </div>
+  </div>
+
+  <!-- SECTION 01: PHASE 0 — DISCOVERY -->
+  <div class="section">
+    <div class="section__header">
+      <span class="section__num">01</span>
+      <span class="section__title" data-i18n="s01_title"></span>
+      <span class="section__badge badge--done" data-i18n="s01_badge"></span>
+    </div>
+    <div class="section__card" id="phase0-card">
+      <div class="section__desc" data-i18n="s01_desc"></div>
+      <div class="section__period"><span class="dot g"></span><span data-i18n="s01_period"></span></div>
+      <div id="phase0-list"></div>
+      <div class="note note--green"><span class="note__icon">✅</span><span data-i18n="s01_note"></span></div>
+    </div>
+  </div>
+
+  <!-- SECTION 02: GANTT CHART -->
+  <div class="section">
+    <div class="section__header">
+      <span class="section__num">02</span>
+      <span class="section__title" data-i18n="s02_title"></span>
+    </div>
+    <div class="section__card">
+      <div class="section__desc" data-i18n="s02_desc"></div>
+      <div style="padding:16px 18px 18px">
+        <div class="gantt-wrap">
+          <div class="gantt" id="gantt-chart"></div>
+        </div>
+        <div class="gantt-legend">
+          <div class="gantt-legend__item"><div class="gantt-legend__dot" style="background:rgba(52,211,153,0.4);border:1px solid rgba(52,211,153,0.5)"></div><span data-i18n="leg0"></span></div>
+          <div class="gantt-legend__item"><div class="gantt-legend__dot" style="background:rgba(124,91,245,0.4);border:1px solid rgba(124,91,245,0.5)"></div><span data-i18n="leg1"></span></div>
+          <div class="gantt-legend__item"><div class="gantt-legend__dot" style="background:rgba(96,165,250,0.4);border:1px solid rgba(96,165,250,0.5)"></div><span data-i18n="leg2"></span></div>
+          <div class="gantt-legend__item"><div class="gantt-legend__dot" style="background:rgba(251,191,36,0.35);border:1px solid rgba(251,191,36,0.45)"></div><span data-i18n="leg3"></span></div>
+          <div class="gantt-legend__item"><div class="gantt-legend__dot" style="background:var(--red);opacity:0.7"></div><span data-i18n="leg_today"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 03: PHASE 1 -->
+  <div class="section">
+    <div class="section__header">
+      <span class="section__num">03</span>
+      <span class="section__title" data-i18n="s03_title"></span>
+      <span class="section__badge badge--active" data-i18n="s03_badge"></span>
+    </div>
+    <div class="section__card">
+      <div class="section__desc" data-i18n="s03_desc"></div>
+      <div class="section__period"><span class="dot"></span><span data-i18n="s03_period"></span></div>
+      <div id="phase1-list"></div>
+      <div class="note note--info"><span class="note__icon">🎯</span><span data-i18n="s03_note"></span></div>
+    </div>
+  </div>
+
+  <!-- SECTION 04: PHASE 2 -->
+  <div class="section">
+    <div class="section__header">
+      <span class="section__num">04</span>
+      <span class="section__title" data-i18n="s04_title"></span>
+      <span class="section__badge badge--blue" data-i18n="s04_badge"></span>
+    </div>
+    <div class="section__card">
+      <div class="section__desc" data-i18n="s04_desc"></div>
+      <div class="section__period"><span class="dot b"></span><span data-i18n="s04_period"></span></div>
+      <div id="phase2-list"></div>
+      <div class="note note--muted"><span class="note__icon">🧩</span><span data-i18n="s04_note"></span></div>
+    </div>
+  </div>
+
+  <!-- SECTION 05: PHASE 3 -->
+  <div class="section">
+    <div class="section__header">
+      <span class="section__num">05</span>
+      <span class="section__title" data-i18n="s05_title"></span>
+      <span class="section__badge badge--amber" data-i18n="s05_badge"></span>
+    </div>
+    <div class="section__card">
+      <div class="section__desc" data-i18n="s05_desc"></div>
+      <div class="section__period"><span class="dot a"></span><span data-i18n="s05_period"></span></div>
+      <div id="phase3-list"></div>
+      <div class="note note--warn"><span class="note__icon">🚀</span><span data-i18n="s05_note"></span></div>
+    </div>
+  </div>
+
+  <!-- SECTION 06: AI ARCHITECTURE -->
+  <div class="section">
+    <div class="section__header">
+      <span class="section__num">06</span>
+      <span class="section__title" data-i18n="s06_title"></span>
+    </div>
+    <div class="section__card">
+      <div class="section__desc" data-i18n="s06_desc"></div>
+      <div class="arch-levels" id="arch-content"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 07: PARTNER SEGMENTS -->
+  <div class="section">
+    <div class="section__header">
+      <span class="section__num">07</span>
+      <span class="section__title" data-i18n="s07_title"></span>
+    </div>
+    <div class="section__card">
+      <div class="section__desc" data-i18n="s07_desc"></div>
+      <div class="seg-grid" id="segments-content"></div>
+      <div class="note note--muted"><span class="note__icon">💰</span><span data-i18n="s07_note"></span></div>
+    </div>
+  </div>
+
+  <!-- SECTION 08: KEY ENTITIES -->
+  <div class="section">
+    <div class="section__header">
+      <span class="section__num">08</span>
+      <span class="section__title" data-i18n="s08_title"></span>
+    </div>
+    <div class="section__card">
+      <div class="section__desc" data-i18n="s08_desc"></div>
+      <div class="entities-list" id="entities-content"></div>
+    </div>
+  </div>
+
+  <!-- CELEBRATION -->
+  <div class="celebration" id="celebration">
+    <div class="celebration__icon">🎉</div>
+    <div class="celebration__title" data-i18n="cel_title"></div>
+    <div class="celebration__sub" data-i18n="cel_sub"></div>
+  </div>
+
+  <button class="btn-reset" onclick="resetProgress()" data-i18n="btn_reset"></button>
+
+  <div class="footer">
+    <span data-i18n="footer_left"></span>
+    <span data-i18n="footer_right"></span>
+  </div>
+
+</div><!-- /wrapper -->
+
+<script>
+// ─── TRANSLATIONS ──────────────────────────────────────────────────────────
+const T = {
+  ru: {
+    badge: 'Внутренняя дорожная карта',
+    header_sub: 'Проект автоматизации бизнес-процессов партнёрской программы 1XBET Serbia. Диаграмма Ганта, этапы внедрения и прогресс выполнения задач.',
+    meta_start: 'Старт проекта: 22 мая 2026',
+    meta_finish: 'Финал: 14 ноября 2026',
+    meta_team: 'Команда: 6 человек',
+    meta_client: 'Клиент: 1XBET Serbia',
+    stat1: 'Фазы реализации',
+    stat2: 'Задач в дорожной карте',
+    stat3: 'Сотрудников в команде',
+    stat4: 'Модели сделок',
+    stat5: 'Слоёв базы знаний',
+    stat6: 'Месяцев до финала',
+    s00_title: 'О проекте',
+    s00_badge: 'В работе',
+    s00_desc: 'Бизнес 1XBET Serbia не оцифрован: знания сконцентрированы у одного человека, CRM отсутствует, процессы не задокументированы. Проект ИИ-визации переводит компанию с ручного режима на системный — с базой знаний, автоматизированным пайплайном партнёров и ИИ-контуром управления.',
+    s00_note: 'Цель: устранить узкое место (основатель), автоматизировать поиск и квалификацию партнёров, запустить ассистивную систему сверки.',
+    s00_note2: 'Можно автоматизировать: поиск и обогащение партнёров, первичный аутрич, шаблоны офферов, обучение команды, базу знаний, входящие заявки, подготовку к сверке, контент/SMM.',
+    s01_title: 'Фаза 0 — Диагностика и проектирование',
+    s01_badge: '✓ Завершено',
+    s01_desc: 'Подготовительная фаза: глубокое погружение в бизнес, анализ точек автоматизации, проектирование архитектуры базы знаний и системной инструкции для ИИ-ассистента.',
+    s01_period: 'Апрель 2026 — до 21 мая 2026',
+    s01_note: 'Фаза полностью завершена до старта проекта 22 мая. Результат: готовая архитектура базы знаний (8 слоёв), карта процессов, приоритеты внедрения.',
+    s02_title: 'Диаграмма Ганта — Полная дорожная карта',
+    s02_desc: 'Визуальный таймлайн всего проекта от апреля по ноябрь 2026. Красная метка — текущая дата.',
+    s03_title: 'Фаза 1 — Быстрые победы',
+    s03_badge: '▶ Старт 22 мая',
+    s03_desc: 'Фундамент системы: оцифровка ключевых процессов, первичная структура CRM и реестра партнёров. Без этих артефактов следующие фазы невозможны.',
+    s03_period: '22 мая — 19 июня 2026 · 4 недели',
+    s03_note: 'Приоритет: пайплайн-статусы и реестр партнёров — первые в работу. Шаблоны и FAQ — параллельно со второй недели.',
+    s04_title: 'Фаза 2 — Ключевые системы',
+    s04_badge: 'Июнь – Август',
+    s04_desc: 'Развёртывание полной базы знаний (8 слоёв), запуск ИИ-копилота для обучения команды, база партнёров со скорингом и ассистивная система сверки.',
+    s04_period: '23 июня — 14 августа 2026 · ~7 недель',
+    s04_note: 'База знаний строится в 3 волны (10 / 10 / 8 документов). ИИ-копилот подключается как только готовы первые 10 критичных документов.',
+    s05_title: 'Фаза 3 — ИИ-масштабирование',
+    s05_badge: 'Авг – Ноябрь',
+    s05_desc: 'Полуавтоматический аутбаунд-пайплайн, система Health Score для удержания партнёров, SMM-автоматизация, BI-дашборд и итоговая мульти-агентная система.',
+    s05_period: '17 августа — 14 ноября 2026 · ~3 месяца',
+    s05_note: 'Мульти-агентная система — финальный артефакт проекта. Включает 3 уровня: главный ассистент, доменные модули, контур управления.',
+    s06_title: 'Архитектура ИИ-контура',
+    s06_desc: 'Трёхуровневая архитектура: главный ассистент маршрутизирует запросы, доменные модули выполняют специализированные задачи, контур управления контролирует финансы и нестандартные сценарии.',
+    s07_title: 'Сегменты партнёров',
+    s07_desc: '6 целевых сегментов партнёрской программы. Каждый сегмент — своя модель сделки, мотивация и набор возражений.',
+    s07_note: 'Средний чек по сегментам: CPA-сети €480–639, медиабайеры €350–480, SEO-сайты €200–350, Telegram/Instagram €108–200, офлайн €150–250. Модели: RevShare, CPA, Hybrid, Fix, Spend.',
+    s08_title: 'Ключевые сущности базы знаний',
+    s08_desc: 'Сущности, которые должен понимать ИИ-ассистент. Каждая задокументирована в паспорте сущности с полями: что это, владелец, где хранится, как обновляется.',
+    leg0: 'Фаза 0: Диагностика',
+    leg1: 'Фаза 1: Быстрые победы',
+    leg2: 'Фаза 2: Ключевые системы',
+    leg3: 'Фаза 3: AI-масштабирование',
+    leg_today: 'Сегодня',
+    cel_title: 'Все задачи выполнены!',
+    cel_sub: 'ИИ-контур 1XBET Serbia запущен. Система автоматизации партнёрской программы работает.',
+    btn_reset: '↺ Сбросить прогресс',
+    footer_left: 'AI Partner Program · 1XBET Serbia · 2026',
+    footer_right: 'ИИ-визация проекта',
+    today_label: 'СЕГОДНЯ',
+    gantt_months: ['АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ','НОЯ'],
+  },
+  sr: {
+    badge: 'Interna mapa puta',
+    header_sub: 'Projekat automatizacije poslovnih procesa partnerskog programa 1XBET Serbia. Gantogram, faze implementacije i napredak realizacije zadataka.',
+    meta_start: 'Početak projekta: 22. maj 2026.',
+    meta_finish: 'Završetak: 14. novembar 2026.',
+    meta_team: 'Tim: 6 osoba',
+    meta_client: 'Klijent: 1XBET Serbia',
+    stat1: 'Faze realizacije',
+    stat2: 'Zadataka u mapi puta',
+    stat3: 'Članova tima',
+    stat4: 'Modela saradnje',
+    stat5: 'Slojeva baze znanja',
+    stat6: 'Meseci do finala',
+    s00_title: 'O projektu',
+    s00_badge: 'U toku',
+    s00_desc: 'Poslovanje 1XBET Serbia nije digitalizovano: znanje je koncentrisano kod jedne osobe, CRM ne postoji, procesi nisu dokumentovani. AI vizacija projekta prevodi kompaniju iz ručnog u sistemski režim — uz bazu znanja, automatizovani pipeline partnera i AI upravljački kontur.',
+    s00_note: 'Cilj: eliminisati usko grlo (osnivač), automatizovati pronalaženje i kvalifikaciju partnera, pokrenuti asistentski sistem usaglašavanja.',
+    s00_note2: 'Može se automatizovati: pronalaženje i obogaćivanje partnera, inicijalni autbound, šabloni ponuda, obuka tima, baza znanja, dolazne prijave, priprema za usaglašavanje, sadržaj/SMM.',
+    s01_title: 'Faza 0 — Dijagnostika i projektovanje',
+    s01_badge: '✓ Završeno',
+    s01_desc: 'Pripremna faza: duboko uranjanje u poslovanje, analiza tačaka automatizacije, projektovanje arhitekture baze znanja i sistemske instrukcije za AI asistenta.',
+    s01_period: 'April 2026. — do 21. maja 2026.',
+    s01_note: 'Faza je u potpunosti završena pre početka projekta 22. maja. Rezultat: gotova arhitektura baze znanja (8 slojeva), mapa procesa, prioriteti implementacije.',
+    s02_title: 'Gantogram — Kompletna mapa puta',
+    s02_desc: 'Vizuelna vremenska linija celog projekta od aprila do novembra 2026. Crvena oznaka — trenutni datum.',
+    s03_title: 'Faza 1 — Brze pobede',
+    s03_badge: '▶ Start 22. maja',
+    s03_desc: 'Temelj sistema: digitalizacija ključnih procesa, osnovna struktura CRM-a i registra partnera. Bez ovih artefakata naredne faze nisu moguće.',
+    s03_period: '22. maj — 19. jun 2026. · 4 nedelje',
+    s03_note: 'Prioritet: statusi pipelina i registar partnera — prvi u rad. Šabloni i FAQ — paralelno od druge nedelje.',
+    s04_title: 'Faza 2 — Ključni sistemi',
+    s04_badge: 'Jun – Avgust',
+    s04_desc: 'Implementacija kompletne baze znanja (8 slojeva), pokretanje AI kopilota za obuku tima, baza partnera sa skoringom i asistentski sistem usaglašavanja.',
+    s04_period: '23. jun — 14. avgust 2026. · ~7 nedelja',
+    s04_note: 'Baza znanja se gradi u 3 talasa (10 / 10 / 8 dokumenata). AI kopilot se povezuje čim su gotovi prvih 10 kritičnih dokumenata.',
+    s05_title: 'Faza 3 — AI skaliranje',
+    s05_badge: 'Avg – Novembar',
+    s05_desc: 'Polu-automatski autbound pipeline, sistem Health Score za zadržavanje partnera, SMM automatizacija, BI dashboard i finalni multi-agentni sistem.',
+    s05_period: '17. avgust — 14. novembar 2026. · ~3 meseca',
+    s05_note: 'Multi-agentni sistem — finalni artefakt projekta. Uključuje 3 nivoa: glavni asistent, domenski moduli, upravljački kontur.',
+    s06_title: 'Arhitektura AI sistema',
+    s06_desc: 'Tronivоjna arhitektura: glavni asistent rutira zahteve, domenski moduli obavljaju specijalizovane zadatke, upravljački kontur kontroliše finansije i nestandardne scenarije.',
+    s07_title: 'Segmenti partnera',
+    s07_desc: '6 ciljnih segmenata partnerskog programa. Svaki segment — sopstveni model saradnje, motivacija i skup prigovora.',
+    s07_note: 'Prosečna vrednost po segmentima: CPA mreže €480–639, media buying €350–480, SEO sajtovi €200–350, Telegram/Instagram €108–200, offline €150–250. Modeli: RevShare, CPA, Hybrid, Fix, Spend.',
+    s08_title: 'Ključni entiteti baze znanja',
+    s08_desc: 'Entiteti koje AI asistent mora da razume. Svaki je dokumentovan u pasošu entiteta sa poljima: šta je, vlasnik, gde se čuva, kako se ažurira.',
+    leg0: 'Faza 0: Dijagnostika',
+    leg1: 'Faza 1: Brze pobede',
+    leg2: 'Faza 2: Ključni sistemi',
+    leg3: 'Faza 3: AI skaliranje',
+    leg_today: 'Danas',
+    cel_title: 'Svi zadaci su završeni!',
+    cel_sub: 'AI sistem 1XBET Serbia je pokrenut. Sistem automatizacije partnerskog programa radi.',
+    btn_reset: '↺ Resetuj napredak',
+    footer_left: 'AI Partner Program · 1XBET Serbia · 2026',
+    footer_right: 'AI vizacija projekta',
+    today_label: 'DANAS',
+    gantt_months: ['APR','MAJ','JUN','JUL','AVG','SEP','OKT','NOV'],
+  }
+};
+
+// ─── CHECKLIST DATA ─────────────────────────────────────────────────────────
+const CHECKLIST = {
+  ru: {
+    phase0: [
+      { id:'p0-1', text:'Диагностика бизнеса', sub:'Анализ бизнес-модели, команды, болей и текущего состояния процессов 1XBET Serbia', tag:'tag--g', tagText:'Выполнено' },
+      { id:'p0-2', text:'Аудит точек для ИИ и автоматизации', sub:'Определены 10 процессов под автоматизацию и 6 процессов, требующих человека', tag:'tag--g', tagText:'Выполнено' },
+      { id:'p0-3', text:'Проектирование структуры базы знаний', sub:'Архитектура из 8 слоёв и 10 папок, 28 приоритетных документов в 3 волны', tag:'tag--g', tagText:'Выполнено' },
+      { id:'p0-4', text:'Проектирование системной инструкции', sub:'Правила качества базы знаний, форматы хранения, структура паспортов сущностей', tag:'tag--g', tagText:'Выполнено' },
+      { id:'p0-5', text:'Сборка дорожной карты внедрения', sub:'Три горизонта: quick wins (2–4 нед.), средний (1–2 мес.), масштаб (3–6 мес.)', tag:'tag--g', tagText:'Выполнено' },
+    ],
+    phase1: [
+      { id:'p1-1', text:'Статусы пайплайна в CRM', sub:'Определить и зафиксировать статусы партнёра на всех этапах воронки', tag:'tag--p', tagText:'22–28 мая' },
+      { id:'p1-2', text:'Реестр партнёров — базовая версия', sub:'Google Sheets / Airtable: имя, сегмент, модель, статус, менеджер, условия', tag:'tag--p', tagText:'22 мая – 4 июня' },
+      { id:'p1-3', text:'Шаблоны по ключевым процессам', sub:'Поиск партнёра, первый контакт, онбординг, напоминания, эскалация', tag:'tag--p', tagText:'29 мая – 11 июня' },
+      { id:'p1-4', text:'FAQ для команды продаж', sub:'50+ вопрос/ответ: модели сделок, возражения, условия, метрики', tag:'tag--p', tagText:'2–11 июня' },
+      { id:'p1-5', text:'Шаблон запроса на выплату', sub:'Стандартизированный документ для согласования и контроля выплат партнёрам', tag:'tag--p', tagText:'2–7 июня' },
+      { id:'p1-6', text:'Регламенты по сверке', sub:'Методология расчёта CPA/RevShare/Hybrid, формулы, шаблоны сверки', tag:'tag--p', tagText:'5–19 июня' },
+      { id:'p1-7', text:'Трекинг входящих заявок', sub:'Форма + таблица для входящих: источник, сегмент, контакт, дата, статус, менеджер', tag:'tag--p', tagText:'29 мая – 19 июня' },
+    ],
+    phase2: [
+      { id:'p2-1', text:'Развёртывание базы знаний (8 слоёв)', sub:'Волна 1 (10 критичных документов): паспорт бизнеса, словарь, матрица сегментов, регламенты', tag:'tag--b', tagText:'23 июня – 18 июля' },
+      { id:'p2-2', text:'ИИ-копилот для обучения команды', sub:'Системная инструкция + база знаний → Claude-ассистент для ответов на вопросы сотрудников', tag:'tag--b', tagText:'30 июня – 25 июля' },
+      { id:'p2-3', text:'База партнёров со скорингом', sub:'Модель скоринга по 6 факторам: сегмент, трафик, конверсия, история, коммуникация, риск', tag:'tag--b', tagText:'7 июля – 1 авг' },
+      { id:'p2-4', text:'Автоматизация коммерческих материалов', sub:'Генератор КП и офферов на основе сегмента партнёра, модели сделки и трафика', tag:'tag--b', tagText:'14 июля – 1 авг' },
+      { id:'p2-5', text:'Ассистивная система сверки', sub:'Умный контроллер расчётов: проверяет формулы, выявляет аномалии, НЕ заменяет финального решения', tag:'tag--b', tagText:'21 июля – 14 авг' },
+    ],
+    phase3: [
+      { id:'p3-1', text:'Полуавтоматический аутбаунд-пайплайн', sub:'ИИ-поиск и обогащение лидов, автоматический первичный аутрич, квалификация, CRM-интеграция', tag:'tag--a', tagText:'17 авг – 26 сент' },
+      { id:'p3-2', text:'Система Health Score партнёров', sub:'Индекс здоровья по метрикам: активность, объём, качество трафика, коммуникация, тренды', tag:'tag--a', tagText:'7 сент – 17 окт' },
+      { id:'p3-3', text:'SMM-автоматизация', sub:'Контент-план, генерация постов, адаптация под Telegram/Instagram, расписание публикаций', tag:'tag--a', tagText:'21 сент – 1 ноя' },
+      { id:'p3-4', text:'BI-алерты и дашборд аналитики', sub:'Автоматические уведомления при аномалиях: просадка FTD, изменение конверсии, задержки выплат', tag:'tag--a', tagText:'28 сент – 31 окт' },
+      { id:'p3-5', text:'Мульти-агентная система', sub:'Три уровня: главный ассистент → доменные модули (5 агентов) → контур управления', tag:'tag--a', tagText:'12 окт – 14 ноя' },
+    ],
+  },
+  sr: {
+    phase0: [
+      { id:'p0-1', text:'Dijagnostika poslovanja', sub:'Analiza poslovnog modela, tima, bolnih tačaka i trenutnog stanja procesa 1XBET Serbia', tag:'tag--g', tagText:'Završeno' },
+      { id:'p0-2', text:'Revizija tačaka za AI i automatizaciju', sub:'Identifikovano 10 procesa za automatizaciju i 6 procesa koji zahtevaju čoveka', tag:'tag--g', tagText:'Završeno' },
+      { id:'p0-3', text:'Projektovanje strukture baze znanja', sub:'Arhitektura od 8 slojeva i 10 foldera, 28 prioritetnih dokumenata u 3 talasa', tag:'tag--g', tagText:'Završeno' },
+      { id:'p0-4', text:'Projektovanje sistemske instrukcije', sub:'Pravila kvaliteta baze znanja, formati skladištenja, struktura pasoša entiteta', tag:'tag--g', tagText:'Završeno' },
+      { id:'p0-5', text:'Izrada mape puta implementacije', sub:'Tri horizonta: brze pobede (2–4 ned.), srednji (1–2 mes.), skaliranje (3–6 mes.)', tag:'tag--g', tagText:'Završeno' },
+    ],
+    phase1: [
+      { id:'p1-1', text:'Statusi pipelina u CRM-u', sub:'Definisati i utvrditi statuse partnera na svim fazama levka', tag:'tag--p', tagText:'22–28. maj' },
+      { id:'p1-2', text:'Registar partnera — osnovna verzija', sub:'Google Sheets / Airtable: ime, segment, model, status, menadžer, uslovi', tag:'tag--p', tagText:'22. maj – 4. jun' },
+      { id:'p1-3', text:'Šabloni za ključne procese', sub:'Pronalaženje partnera, prvi kontakt, onboarding, podsetnici, eskalacija', tag:'tag--p', tagText:'29. maj – 11. jun' },
+      { id:'p1-4', text:'FAQ za prodajni tim', sub:'50+ pitanje/odgovor: modeli saradnje, prigovori, uslovi, metrike', tag:'tag--p', tagText:'2–11. jun' },
+      { id:'p1-5', text:'Šablon zahteva za isplatu', sub:'Standardizovani dokument za odobravanje i kontrolu isplata partnerima', tag:'tag--p', tagText:'2–7. jun' },
+      { id:'p1-6', text:'Pravilnici za usaglašavanje', sub:'Metodologija izračunavanja CPA/RevShare/Hybrid, formule, šabloni usaglašavanja', tag:'tag--p', tagText:'5–19. jun' },
+      { id:'p1-7', text:'Praćenje dolaznih zahteva', sub:'Forma + tabela za dolazne: izvor, segment, kontakt, datum, status, menadžer', tag:'tag--p', tagText:'29. maj – 19. jun' },
+    ],
+    phase2: [
+      { id:'p2-1', text:'Implementacija baze znanja (8 slojeva)', sub:'Talas 1 (10 kritičnih dokumenata): pasoš poslovanja, rečnik, matrica segmenata, pravilnici', tag:'tag--b', tagText:'23. jun – 18. jul' },
+      { id:'p2-2', text:'AI kopilot za obuku tima', sub:'Sistemska instrukcija + baza znanja → Claude asistent za odgovore na pitanja zaposlenih', tag:'tag--b', tagText:'30. jun – 25. jul' },
+      { id:'p2-3', text:'Baza partnera sa skoringom', sub:'Model skoringa po 6 faktora: segment, saobraćaj, konverzija, istorija, komunikacija, rizik', tag:'tag--b', tagText:'7. jul – 1. avg' },
+      { id:'p2-4', text:'Automatizacija komercijalnih materijala', sub:'Generator ponuda i offera na osnovu segmenta partnera, modela saradnje i saobraćaja', tag:'tag--b', tagText:'14. jul – 1. avg' },
+      { id:'p2-5', text:'Asistentski sistem usaglašavanja', sub:'Pametni kontrolor izračunavanja: proverava formule, otkriva anomalije, NE zamenjuje finalne odluke', tag:'tag--b', tagText:'21. jul – 14. avg' },
+    ],
+    phase3: [
+      { id:'p3-1', text:'Polu-automatski autbound pipeline', sub:'AI pronalaženje i obogaćivanje lidova, automatski inicijalni autbound, kvalifikacija, CRM integracija', tag:'tag--a', tagText:'17. avg – 26. sept' },
+      { id:'p3-2', text:'Sistem Health Score partnera', sub:'Indeks zdravlja po metrikama: aktivnost, obim, kvalitet saobraćaja, komunikacija, trendovi', tag:'tag--a', tagText:'7. sept – 17. okt' },
+      { id:'p3-3', text:'SMM automatizacija', sub:'Plan sadržaja, generisanje postova, adaptacija za Telegram/Instagram, raspored objavljivanja', tag:'tag--a', tagText:'21. sept – 1. nov' },
+      { id:'p3-4', text:'BI alarmi i analitički dashboard', sub:'Automatska obaveštenja pri anomalijama: pad FTD, promena konverzije, kašnjenje isplata', tag:'tag--a', tagText:'28. sept – 31. okt' },
+      { id:'p3-5', text:'Multi-agentni sistem', sub:'Tri nivoa: glavni asistent → domenski moduli (5 agenata) → upravljački kontur', tag:'tag--a', tagText:'12. okt – 14. nov' },
+    ],
+  }
+};
+
+// ─── ARCHITECTURE DATA ──────────────────────────────────────────────────────
+const ARCH = {
+  ru: [
+    {
+      num:'L1', cls:'lv1', title:'Главный ассистент',
+      sub:'Знает структуру бизнеса, регламенты и метрики. Отвечает на вопросы, маршрутизирует запросы, ставит задачи модулям.',
+      modules:['Паспорт бизнеса','Словарь терминов','Карта процессов','Правила эскалации','База FAQ']
+    },
+    {
+      num:'L2', cls:'lv2', title:'Доменные модули',
+      sub:'5 специализированных агентов, каждый работает со своей областью данных и задач.',
+      modules:['Partner Intelligence: поиск, обогащение, классификация, скоринг','Outreach & Sales Copilot: скрипты, офферы, КП','Onboarding & Enablement: онбординг, обучение','Reconciliation Copilot: сверки, расчёты, аномалии','Content & Promo: SMM, контент, промо']
+    },
+    {
+      num:'L3', cls:'lv3', title:'Контур управления',
+      sub:'Финансовый контроллер, обработчик сложных переговоров. Требует подтверждения человека.',
+      modules:['Финансовый контроль','Сложные переговоры','Репутационные коммуникации','Нестандартные условия','Спорные кейсы']
+    },
+  ],
+  sr: [
+    {
+      num:'L1', cls:'lv1', title:'Glavni asistent',
+      sub:'Poznaje strukturu poslovanja, pravilnike i metrike. Odgovara na pitanja, rutira zahteve, zadaje zadatke modulima.',
+      modules:['Pasoš poslovanja','Rečnik termina','Mapa procesa','Pravila eskalacije','Baza FAQ']
+    },
+    {
+      num:'L2', cls:'lv2', title:'Domenski moduli',
+      sub:'5 specijalizovanih agenata, svaki radi sa svojom oblašću podataka i zadataka.',
+      modules:['Partner Intelligence: pronalaženje, obogaćivanje, klasifikacija, skoring','Outreach & Sales Kopilot: skripte, offeri, ponude','Onboarding & Enablement: onboarding, obuka','Reconciliation Kopilot: usaglašavanja, izračunavanja','Content & Promo: SMM, sadržaj, promo']
+    },
+    {
+      num:'L3', cls:'lv3', title:'Upravljački kontur',
+      sub:'Finansijski kontrolor, obrađivač složenih pregovora. Zahteva potvrdu čoveka.',
+      modules:['Finansijska kontrola','Složeni pregovori','Reputacione komunikacije','Nestandardni uslovi','Sporni slučajevi']
+    },
+  ]
+};
+
+// ─── SEGMENTS DATA ───────────────────────────────────────────────────────────
+const SEGMENTS = {
+  ru: [
+    { icon:'🌐', name:'CPA-сети', model:'CPA · Scale', desc:'Агрегаторы трафика. Дают объём и скорость. Хотят: чёткие условия, стабильные выплаты, прозрачность.' },
+    { icon:'📊', name:'Медиабайинговые команды', model:'CPA · Spend', desc:'Профессиональная покупка трафика. Тестируют быстро. Хотят: высокие ставки, выплаты еженедельно, Reg2Dep > 30%.' },
+    { icon:'🔍', name:'Владельцы SEO-сайтов', model:'Hybrid · RevShare', desc:'Тематический органический трафик. Выше LTV игрока. Хотят: стабильные выплаты, доступ к промо.' },
+    { icon:'📱', name:'Telegram/Instagram-каналы', model:'RevShare · Hybrid', desc:'Быстрый доступ к аудитории. Нативная интеграция. Риск: рекламные ограничения платформ.' },
+    { icon:'🏪', name:'Офлайн-партнёры', model:'RevShare · Hybrid', desc:'Бары, спортцентры, обменники. Локальная аудитория, физический контакт. Хотят: простую механику.' },
+    { icon:'👤', name:'Соло-предприниматели', model:'CPA · Fix', desc:'Независимые вебмастера и арбитражники. Гибкость, прямой контакт. Хотят: индивидуальные условия.' },
+  ],
+  sr: [
+    { icon:'🌐', name:'CPA mreže', model:'CPA · Scale', desc:'Agregatori saobraćaja. Daju obim i brzinu. Žele: jasne uslove, stabilne isplate, transparentnost.' },
+    { icon:'📊', name:'Media buying timovi', model:'CPA · Spend', desc:'Profesionalna kupovina saobraćaja. Brzo testiraju. Žele: visoke stope, nedeljne isplate, Reg2Dep > 30%.' },
+    { icon:'🔍', name:'Vlasnici SEO sajtova', model:'Hybrid · RevShare', desc:'Tematski organski saobraćaj. Viši LTV igrača. Žele: stabilne isplate, pristup promo materijalima.' },
+    { icon:'📱', name:'Telegram/Instagram kanali', model:'RevShare · Hybrid', desc:'Brz pristup publici. Nativna integracija. Rizik: reklamna ograničenja platformi.' },
+    { icon:'🏪', name:'Offline partneri', model:'RevShare · Hybrid', desc:'Barovi, sportski centri, menjačnice. Lokalna publika, fizički kontakt. Žele: jednostavnu mehaniku.' },
+    { icon:'👤', name:'Solo preduzetnici', model:'CPA · Fix', desc:'Nezavisni webmasteri i arbitražeri. Fleksibilnost, direktan kontakt. Žele: individualne uslove.' },
+  ]
+};
+
+// ─── ENTITIES DATA ───────────────────────────────────────────────────────────
+const ENTITIES = {
+  ru: [
+    ['🤝','Партнёр'],['🏷️','Сегмент партнёра'],['📄','Модель сделки'],['💼','Оффер'],
+    ['📡','Источник трафика'],['🎰','Игрок'],['📈','Метрика'],['🔒','Капа'],
+    ['🔗','Постбэк'],['🔄','Сверка'],['💳','Выплата'],['👤','Менеджер'],
+    ['🖼️','Промо-материал'],['🔄','Статус пайплайна'],['⚠️','Риск-событие'],
+  ],
+  sr: [
+    ['🤝','Partner'],['🏷️','Segment partnera'],['📄','Model saradnje'],['💼','Offer'],
+    ['📡','Izvor saobraćaja'],['🎰','Igrač'],['📈','Metrika'],['🔒','Kapa'],
+    ['🔗','Postback'],['🔄','Usaglašavanje'],['💳','Isplata'],['👤','Menadžer'],
+    ['🖼️','Promo materijal'],['🔄','Status pipelina'],['⚠️','Rizični događaj'],
+  ]
+};
+
+// ─── GANTT DATA ──────────────────────────────────────────────────────────────
+// Timeline: April 1 → November 14, 2026 = 228 days (day 0 = Apr 1)
+// left% = day/228*100, width% = duration/228*100
+
+const GANTT_TASKS = {
+  ru: [
+    { group:'ФАЗА 0 · ДИАГНОСТИКА', cls:'bar--ph0', tasks:[
+      { lbl:'Диагностика бизнеса',      l:0.00, w:4.39 },
+      { lbl:'Аудит точек ИИ',           l:2.63, w:5.26 },
+      { lbl:'Архитектура базы знаний',  l:5.26, w:7.02 },
+      { lbl:'Системная инструкция',     l:8.77, w:6.58 },
+      { lbl:'Дорожная карта',           l:14.91,w:7.46 },
+    ]},
+    { group:'ФАЗА 1 · БЫСТРЫЕ ПОБЕДЫ', cls:'bar--ph1', tasks:[
+      { lbl:'Статусы пайплайна',        l:22.37,w:3.07 },
+      { lbl:'Реестр партнёров',         l:22.37,w:6.14 },
+      { lbl:'Шаблоны процессов',        l:25.44,w:6.14 },
+      { lbl:'FAQ для продаж',           l:27.19,w:4.39 },
+      { lbl:'Шаблон выплат',            l:27.19,w:2.63 },
+      { lbl:'Регламенты сверки',        l:28.51,w:6.58 },
+      { lbl:'Трекинг заявок',           l:25.44,w:9.65 },
+    ]},
+    { group:'ФАЗА 2 · КЛЮЧЕВЫЕ СИСТЕМЫ', cls:'bar--ph2', tasks:[
+      { lbl:'База знаний',              l:36.40,w:11.40},
+      { lbl:'ИИ-копилот обучения',      l:39.47,w:11.40},
+      { lbl:'База партнёров+скоринг',   l:42.54,w:11.40},
+      { lbl:'Комм. материалы',          l:45.61,w:8.33 },
+      { lbl:'Система сверки',           l:48.68,w:10.96},
+    ]},
+    { group:'ФАЗА 3 · ИИ-МАСШТАБИРОВАНИЕ', cls:'bar--ph3', tasks:[
+      { lbl:'Аутбаунд-пайплайн',        l:60.53,w:17.98},
+      { lbl:'Health Score',             l:69.74,w:17.98},
+      { lbl:'SMM-автоматизация',        l:75.88,w:18.42},
+      { lbl:'BI-алерты',                l:78.95,w:14.91},
+      { lbl:'Мульти-агент',             l:85.09,w:14.91},
+    ]},
+  ],
+  sr: [
+    { group:'FAZA 0 · DIJAGNOSTIKA', cls:'bar--ph0', tasks:[
+      { lbl:'Dijagnostika poslovanja',  l:0.00, w:4.39 },
+      { lbl:'Revizija AI tačaka',       l:2.63, w:5.26 },
+      { lbl:'Arhitektura baze znanja',  l:5.26, w:7.02 },
+      { lbl:'Sistemska instrukcija',    l:8.77, w:6.58 },
+      { lbl:'Mapa puta',                l:14.91,w:7.46 },
+    ]},
+    { group:'FAZA 1 · BRZE POBEDE', cls:'bar--ph1', tasks:[
+      { lbl:'Statusi pipelina',         l:22.37,w:3.07 },
+      { lbl:'Registar partnera',        l:22.37,w:6.14 },
+      { lbl:'Šabloni procesa',          l:25.44,w:6.14 },
+      { lbl:'FAQ za prodaju',           l:27.19,w:4.39 },
+      { lbl:'Šablon isplate',           l:27.19,w:2.63 },
+      { lbl:'Pravilnici sravnjivanja',  l:28.51,w:6.58 },
+      { lbl:'Praćenje prijava',         l:25.44,w:9.65 },
+    ]},
+    { group:'FAZA 2 · KLJUČNI SISTEMI', cls:'bar--ph2', tasks:[
+      { lbl:'Baza znanja',              l:36.40,w:11.40},
+      { lbl:'AI kopilot obuke',         l:39.47,w:11.40},
+      { lbl:'Baza partnera+skoring',    l:42.54,w:11.40},
+      { lbl:'Kom. materijali',          l:45.61,w:8.33 },
+      { lbl:'Sistem usaglašavanja',     l:48.68,w:10.96},
+    ]},
+    { group:'FAZA 3 · AI SKALIRANJE', cls:'bar--ph3', tasks:[
+      { lbl:'Autbound pipeline',        l:60.53,w:17.98},
+      { lbl:'Health Score',             l:69.74,w:17.98},
+      { lbl:'SMM automatizacija',       l:75.88,w:18.42},
+      { lbl:'BI alarmi',                l:78.95,w:14.91},
+      { lbl:'Multi-agentni sistem',     l:85.09,w:14.91},
+    ]},
+  ]
+};
+
+// ─── MONTH WIDTHS (% of 228 days) ────────────────────────────────────────────
+const MONTHS_W = [13.16, 13.60, 13.16, 13.60, 13.60, 13.16, 13.60, 6.14];
+// Starts at: [0, 13.16, 26.75, 39.91, 53.51, 67.11, 80.26, 93.86]
+const MONTHS_STARTS = [0, 13.16, 26.75, 39.91, 53.51, 67.11, 80.26, 93.86];
+
+// Today = April 18, 2026 → day 17 → 7.46%
+const TODAY_PCT = 7.46;
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+const STORAGE_KEY = 'ai_partner_program_v1';
+const LANG_KEY = 'ai_pp_lang';
+let lang = localStorage.getItem(LANG_KEY) || 'ru';
+let wasComplete = false;
+
+// ─── RENDER CHECKLIST ────────────────────────────────────────────────────────
+function renderChecklist(containerId, tasks) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+  tasks.forEach(task => {
+    const div = document.createElement('div');
+    div.className = 'item';
+    div.dataset.key = task.id;
+    div.innerHTML = `
+      <div class="item__cb">
+        <svg class="item__ck" width="12" height="10" viewBox="0 0 12 10" fill="none">
+          <path d="M1.5 5L4.5 8L10.5 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="item__content">
+        <div class="item__text">${task.text}</div>
+        <div class="item__sub">${task.sub}</div>
+        <span class="item__tag ${task.tag}">${task.tagText}</span>
+      </div>`;
+    div.addEventListener('click', () => toggleItem(div));
+    container.appendChild(div);
+  });
+}
+
+function renderAllChecklists() {
+  renderChecklist('phase0-list', CHECKLIST[lang].phase0);
+  renderChecklist('phase1-list', CHECKLIST[lang].phase1);
+  renderChecklist('phase2-list', CHECKLIST[lang].phase2);
+  renderChecklist('phase3-list', CHECKLIST[lang].phase3);
+  loadState();
+}
+
+// ─── RENDER GANTT ─────────────────────────────────────────────────────────────
+function renderGantt() {
+  const container = document.getElementById('gantt-chart');
+  if (!container) return;
+  const tasks = GANTT_TASKS[lang];
+  const months = T[lang].gantt_months;
+  const todayLabel = T[lang].today_label;
+
+  let html = '';
+
+  // Month header row
+  html += '<div class="gantt__head">';
+  MONTHS_W.forEach((w, i) => {
+    html += `<div class="gantt__month" style="width:${w}%">${months[i]}</div>`;
+  });
+  html += '</div>';
+
+  // For each group
+  tasks.forEach(group => {
+    html += `<div class="gantt__group-label">${group.group}</div>`;
+    group.tasks.forEach(task => {
+      html += `<div class="gantt__row">
+        <div class="gantt__lbl">${task.lbl}</div>
+        <div class="gantt__track">
+          <div class="gantt__track-bg">`;
+      // Vertical month lines
+      MONTHS_STARTS.slice(1).forEach(x => {
+        html += `<div class="gantt__vl" style="left:${x}%"></div>`;
+      });
+      // Today marker
+      html += `<div class="gantt__today" style="left:${TODAY_PCT}%" title="${todayLabel}"></div>`;
+      html += `</div>
+          <div class="gantt__bar ${group.cls}" style="left:${task.l}%;width:${task.w}%"></div>
+        </div>
+      </div>`;
+    });
+  });
+
+  container.innerHTML = html;
+}
+
+// ─── RENDER ARCHITECTURE ──────────────────────────────────────────────────────
+function renderArch() {
+  const container = document.getElementById('arch-content');
+  if (!container) return;
+  container.innerHTML = ARCH[lang].map(l => `
+    <div class="arch-level">
+      <div class="arch-level__head">
+        <div class="arch-level__num ${l.cls}">${l.num}</div>
+        <div class="arch-level__title">${l.title}</div>
+      </div>
+      <div class="arch-level__sub">${l.sub}</div>
+      <div class="arch-modules">${l.modules.map(m=>`<div class="arch-module">${m}</div>`).join('')}</div>
+    </div>`).join('');
+}
+
+// ─── RENDER SEGMENTS ─────────────────────────────────────────────────────────
+function renderSegments() {
+  const container = document.getElementById('segments-content');
+  if (!container) return;
+  container.innerHTML = SEGMENTS[lang].map(s => `
+    <div class="seg-card">
+      <div class="seg-card__icon">${s.icon}</div>
+      <div class="seg-card__name">${s.name}</div>
+      <div class="seg-card__model">${s.model}</div>
+      <div class="seg-card__desc">${s.desc}</div>
+    </div>`).join('');
+}
+
+// ─── RENDER ENTITIES ─────────────────────────────────────────────────────────
+function renderEntities() {
+  const container = document.getElementById('entities-content');
+  if (!container) return;
+  container.innerHTML = ENTITIES[lang].map(([icon, name]) =>
+    `<div class="entity-tag"><span>${icon}</span>${name}</div>`).join('');
+}
+
+// ─── I18N ─────────────────────────────────────────────────────────────────────
+function applyTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (T[lang][key] !== undefined) el.textContent = T[lang][key];
+  });
+  document.documentElement.lang = lang === 'ru' ? 'ru' : 'sr';
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+}
+
+function setLang(l) {
+  lang = l;
+  localStorage.setItem(LANG_KEY, l);
+  applyTranslations();
+  renderAllChecklists();
+  renderGantt();
+  renderArch();
+  renderSegments();
+  renderEntities();
+}
+
+// ─── CHECKLIST LOGIC ──────────────────────────────────────────────────────────
+function getState() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
+  catch { return {}; }
+}
+
+function saveState() {
+  const state = {};
+  document.querySelectorAll('.item[data-key]').forEach(el => {
+    state[el.dataset.key] = el.classList.contains('checked');
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function loadState() {
+  const state = getState();
+  document.querySelectorAll('.item[data-key]').forEach(el => {
+    if (state[el.dataset.key]) el.classList.add('checked');
+  });
+  updateProgress(false);
+}
+
+function toggleItem(el) {
+  el.classList.toggle('checked');
+  saveState();
+  updateProgress(true);
+}
+
+function updateProgress(canCelebrate) {
+  const all = document.querySelectorAll('.item[data-key]');
+  const done = document.querySelectorAll('.item[data-key].checked');
+  const pct = all.length > 0 ? Math.round((done.length / all.length) * 100) : 0;
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = pct + '%';
+
+  const celebration = document.getElementById('celebration');
+  if (pct === 100 && canCelebrate && !wasComplete) {
+    wasComplete = true;
+    celebration.classList.add('visible');
+    launchConfetti();
+  } else if (pct < 100) {
+    wasComplete = false;
+    celebration.classList.remove('visible');
+  }
+}
+
+function resetProgress() {
+  const msgs = { ru:'Сбросить весь прогресс?', sr:'Resetovati sav napredak?' };
+  if (!confirm(msgs[lang])) return;
+  document.querySelectorAll('.item[data-key]').forEach(el => el.classList.remove('checked'));
+  localStorage.setItem(STORAGE_KEY, '{}');
+  wasComplete = false;
+  document.getElementById('celebration').classList.remove('visible');
+  updateProgress(false);
+}
+
+// ─── CONFETTI ─────────────────────────────────────────────────────────────────
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const colors = ['#7c5bf5','#9d7cff','#34d399','#6ee7b7','#fbbf24','#60a5fa','#f87171','#a78bfa','#4ade80','#facc15'];
+  let particles = [];
+
+  const burst = (x, y) => {
+    for (let i = 0; i < 100; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = Math.random() * 8 + 2;
+      particles.push({
+        x, y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 4,
+        r: Math.random() * 5 + 2,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        gravity: 0.2, friction: 0.98, opacity: 1,
+        rotation: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 0.2,
+      });
+    }
+  };
+
+  const locs = [[0.2,0.3],[0.5,0.2],[0.8,0.3],[0.1,0.6],[0.5,0.5],[0.9,0.6],[0.3,0.8],[0.7,0.8],[0.5,0.9]];
+  locs.forEach(([xr, yr], i) => {
+    setTimeout(() => burst(canvas.width * xr, canvas.height * yr), i * 150);
+  });
+
+  let start = null;
+  const animate = (ts) => {
+    if (!start) start = ts;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles = particles.filter(p => p.opacity > 0.05);
+    particles.forEach(p => {
+      p.vy += p.gravity; p.vx *= p.friction; p.vy *= p.friction;
+      p.x += p.vx; p.y += p.vy; p.opacity -= 0.008; p.rotation += p.rotSpeed;
+      ctx.save(); ctx.globalAlpha = p.opacity; ctx.fillStyle = p.color;
+      ctx.translate(p.x, p.y); ctx.rotate(p.rotation);
+      ctx.fillRect(-p.r, -p.r, p.r * 2, p.r * 2);
+      ctx.restore();
+    });
+    if (ts - start < 8000 && particles.length > 0) requestAnimationFrame(animate);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  };
+  requestAnimationFrame(animate);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+applyTranslations();
+renderAllChecklists();
+renderGantt();
+renderArch();
+renderSegments();
+renderEntities();
+</script>
+</body>
+</html>
