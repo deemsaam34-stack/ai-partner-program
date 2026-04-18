@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI-агенты, которые продают услуги 24/7</title>
+  <meta name="description" content="Запускаем AI-агентов продавцов услуг, которые отвечают за секунды, квалифицируют лиды и доводят до оплаты без потери заявок." />
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-soft: rgba(18, 28, 48, 0.72);
+      --card: rgba(255, 255, 255, 0.08);
+      --line: rgba(255, 255, 255, 0.12);
+      --text: #f4f7fb;
+      --muted: #a8b6cc;
+      --accent: #73e0ff;
+      --accent-2: #a47dff;
+      --accent-3: #5cffb3;
+      --shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(115, 224, 255, 0.18), transparent 30%),
+        radial-gradient(circle at 85% 15%, rgba(164, 125, 255, 0.2), transparent 26%),
+        radial-gradient(circle at 50% 85%, rgba(92, 255, 179, 0.12), transparent 24%),
+        linear-gradient(180deg, #06101d 0%, #091427 45%, #050b16 100%);
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 10px 30px rgba(115, 224, 255, 0.3);
+      display: grid;
+      place-items: center;
+      color: #06101d;
+      font-weight: 900;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 14px 22px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 700;
+      transition: 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #07111f;
+      box-shadow: 0 16px 40px rgba(115, 224, 255, 0.22);
+    }
+
+    .btn.secondary {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--line);
+      color: var(--text);
+    }
+
+    .hero {
+      padding: 34px 0 60px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--accent);
+      font-size: 14px;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      font-size: clamp(42px, 7vw, 78px);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #ffffff 0%, var(--accent) 35%, var(--accent-2) 70%, var(--accent-3) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .lead {
+      margin: 0 0 28px;
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.65;
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .stat {
+      padding: 18px;
+      background: var(--bg-soft);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      backdrop-filter: blur(16px);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 30px;
+      margin-bottom: 6px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .visual {
+      position: relative;
+      min-height: 620px;
+    }
+
+    .panel {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 34px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(164, 125, 255, 0.2), transparent 30%);
+      pointer-events: none;
+    }
+
+    .panel-top {
+      display: flex;
+      gap: 8px;
+      padding: 18px 20px 0;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+    }
+
+    .panel-content {
+      padding: 18px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .message, .chart, .mini-card {
+      background: rgba(7, 17, 31, 0.58);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 22px;
+      padding: 18px;
+    }
+
+    .message small, .mini-card small {
+      color: var(--muted);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .message strong {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .message p, .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .chart {
+      padding-bottom: 24px;
+    }
+
+    .bars {
+      display: flex;
+      align-items: end;
+      gap: 10px;
+      height: 160px;
+      margin-top: 20px;
+    }
+
+    .bar {
+      flex: 1;
+      border-radius: 16px 16px 6px 6px;
+      background: linear-gradient(180deg, var(--accent), var(--accent-2));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.25);
+    }
+
+    .floating {
+      position: absolute;
+      right: -18px;
+      bottom: 32px;
+      width: 240px;
+      padding: 18px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(92,255,179,0.18), rgba(115,224,255,0.12));
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .section {
+      padding: 34px 0;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: end;
+      margin-bottom: 24px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(30px, 4vw, 48px);
+      letter-spacing: -0.03em;
+    }
+
+    .section-head p {
+      margin: 0;
+      max-width: 520px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      padding: 24px;
+      border-radius: 26px;
+      background: var(--bg-soft);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+    }
+
+    .icon {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, rgba(115,224,255,0.18), rgba(164,125,255,0.22));
+      border: 1px solid rgba(255,255,255,0.12);
+      font-size: 22px;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 22px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .process {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .step {
+      position: relative;
+      padding: 24px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #07111f;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .step p { color: var(--muted); margin: 0; line-height: 1.6; }
+
+    .cta {
+      margin: 36px 0 56px;
+      padding: 34px;
+      border-radius: 34px;
+      background: linear-gradient(135deg, rgba(115,224,255,0.18), rgba(164,125,255,0.18));
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .cta h3 { margin: 0 0 10px; font-size: clamp(28px, 4vw, 42px); }
+    .cta p { margin: 0; color: var(--muted); max-width: 650px; line-height: 1.65; }
+
+    footer {
+      padding: 0 0 42px;
+      color: #7f90aa;
+      font-size: 14px;
+    }
+
+    @media (max-width: 1024px) {
+      .hero, .grid-3, .process { grid-template-columns: 1fr; }
+      .visual { min-height: 540px; }
+      .section-head { flex-direction: column; align-items: start; }
+    }
+
+    @media (max-width: 640px) {
+      .nav { flex-direction: column; align-items: start; gap: 14px; }
+      .stats { grid-template-columns: 1fr; }
+      .hero { padding-top: 10px; }
+      .visual { min-height: 500px; }
+      .floating { position: static; width: 100%; margin-top: 16px; }
+      .cta { padding: 24px; }
+      .btn { width: 100%; }
+      .hero-cta { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="nav">
+      <div class="brand">
+        <div class="brand-badge">AI</div>
+        <span>SalesAgent Studio</span>
+      </div>
+      <div class="nav-actions">
+        <a class="btn secondary" href="#features">Что умеет</a>
+        <a class="btn primary" href="#cta">Запустить агента</a>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <div class="eyebrow">AI-продавцы услуг, которые не спят и не теряют лиды</div>
+        <h1>Продавайте <span class="gradient-text">услуги через AI-агентов</span>, а не через упущенные заявки</h1>
+        <p class="lead">Запускаем AI-агентов, которые отвечают клиентам за секунды, выявляют потребность, обрабатывают возражения, назначают созвон и доводят до оплаты. Подходит для агентств, студий, консалтинга, ремонта, медицины, обучения и B2B-сервисов.</p>
+        <div class="hero-cta">
+          <a class="btn primary" href="#cta">Получить демо</a>
+          <a class="btn secondary" href="#process">Как это работает</a>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <strong>24/7</strong>
+            <span>агент отвечает без выходных и пауз</span>
+          </div>
+          <div class="stat">
+            <strong>+38%</strong>
+            <span>рост конверсии из входящих заявок</span>
+          </div>
+          <div class="stat">
+            <strong>&lt;10 сек</strong>
+            <span>среднее время первого ответа</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="visual">
+        <div class="panel">
+          <div class="panel-top">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          <div class="panel-content">
+            <div class="message">
+              <small>Новый лид • Telegram / WhatsApp / Сайт</small>
+              <strong>Клиент: «Сколько стоит настройка рекламы под ключ?»</strong>
+              <p>AI-агент мгновенно уточняет нишу, бюджет, сроки, формат работы и предлагает следующий шаг: бриф, созвон или оплату стартового пакета.</p>
+            </div>
+            <div class="chart">
+              <small>Конверсия после запуска</small>
+              <div class="bars">
+                <div class="bar" style="height:38%"></div>
+                <div class="bar" style="height:52%"></div>
+                <div class="bar" style="height:67%"></div>
+                <div class="bar" style="height:81%"></div>
+                <div class="bar" style="height:96%"></div>
+              </div>
+            </div>
+            <div class="mini-card">
+              <small>Что делает агент</small>
+              <p>Квалифицирует лидов, считает стоимость, отвечает на FAQ, записывает на встречу, напоминает, дожимает и передаёт только тёплых клиентов вашей команде.</p>
+            </div>
+          </div>
+        </div>
+        <div class="floating">
+          <small>Результат для бизнеса</small>
+          <h3 style="margin:8px 0 10px; font-size:24px;">Меньше рутины, больше продаж</h3>
+          <p style="margin:0; color:var(--text); line-height:1.55;">Ваш отдел продаж получает уже подготовленные диалоги, заполненные данные и приоритетные лиды.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="section-head">
+        <h2>Один AI-агент закрывает то, что обычно делают сразу несколько людей</h2>
+        <p>Он не просто отвечает в чате. Он ведёт клиента по воронке, сохраняет контекст и помогает продавать дороже, быстрее и без ручной рутины.</p>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="icon">⚡</div>
+          <h3>Мгновенный первый контакт</h3>
+          <p>Пока конкурент ещё не открыл мессенджер, ваш агент уже зацепил клиента, узнал задачу и перевёл разговор к следующему шагу.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🧠</div>
+          <h3>Продажа по вашему сценарию</h3>
+          <p>Встраиваем ваши услуги, офферы, прайс, кейсы, возражения и tone of voice. Агент говорит так, как говорит сильный менеджер.</p>
+        </div>
+        <div class="card">
+          <div class="icon">📈</div>
+          <h3>Квалификация и рост конверсии</h3>
+          <p>Агент фильтрует случайные запросы, выделяет горячих лидов и доводит ценных клиентов до звонка, счёта или оплаты.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="process">
+      <div class="section-head">
+        <h2>Как запускается AI-продавец услуг</h2>
+        <p>Быстро, без долгой интеграционной боли. За несколько шагов вы получаете рабочий инструмент, а не бесконечный пилот.</p>
+      </div>
+      <div class="process">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Разбор вашей воронки</h3>
+          <p>Понимаем, как вы продаёте сейчас, какие каналы важны и на каком этапе чаще всего теряются деньги.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Обучение агента</h3>
+          <p>Загружаем офферы, кейсы, прайс, типовые вопросы и логику квалификации именно под ваши услуги.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Подключение каналов</h3>
+          <p>Сайт, Telegram, WhatsApp, Instagram, CRM, календарь, формы, таблицы и внутренняя передача лидов команде.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <h3>Запуск и оптимизация</h3>
+          <p>Следим за диалогами, подкручиваем скрипты, повышаем конверсию и масштабируем на новые направления.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>Для кого это особенно выгодно</h2>
+        <p>Если у вас дорогая услуга, длинный цикл сделки или много входящих с одинаковыми вопросами, AI-агент окупается особенно быстро.</p>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="icon">🏢</div>
+          <h3>Агентства и студии</h3>
+          <p>Маркетинг, дизайн, разработка, продакшн, SEO, реклама. Агент собирает бриф, бюджет и квалифицирует входящий поток.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🩺</div>
+          <h3>Экспертные услуги</h3>
+          <p>Юристы, врачи, консультанты, коучи, наставники. AI снимает типовые вопросы и записывает только релевантных клиентов.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🔧</div>
+          <h3>Локальный сервис</h3>
+          <p>Ремонт, стройка, клининг, монтаж, производство под заказ. Агент уточняет задачу, сроки и сразу ведёт к заявке.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="cta">
+      <div>
+        <h3>Хотите AI-агента, который начнёт продавать уже в этом месяце?</h3>
+        <p>Покажем демо под вашу нишу, соберём быстрый пилот и дадим понятный план запуска. Без воды, без бесконечных созвонов, с фокусом на выручку.</p>
+      </div>
+      <a class="btn primary" href="mailto:sales@example.com">Запросить запуск</a>
+    </section>
+
+    <footer>
+      Лендинг для продажи AI-агентов продавцов услуг. Один файл, быстрый старт, сильная подача.
+    </footer>
+  </div>
+</body>
+</html>
