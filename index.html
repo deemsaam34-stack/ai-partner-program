@@ -137,6 +137,28 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .gantt-legend__item{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text-secondary);font-family:'JetBrains Mono',monospace}
 .gantt-legend__dot{width:12px;height:10px;border-radius:3px;flex-shrink:0}
 
+/* TIMELINE */
+.timeline-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:20px 18px 24px}
+.timeline{display:flex;gap:0;min-width:760px;position:relative;padding-top:16px}
+.tl-step{position:relative;min-width:170px;flex:1;display:flex;flex-direction:column;align-items:flex-start}
+.tl-step__connector{position:absolute;top:72px;left:calc(100% - 16px);width:calc(100% - 16px);height:2px;background:linear-gradient(90deg,var(--border-accent),var(--border));z-index:0;pointer-events:none}
+.tl-step:last-child .tl-step__connector{display:none}
+.tl-step__icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:10px;border:2px solid var(--border-accent);background:var(--bg-card);position:relative;z-index:1;transition:transform .3s,border-color .3s}
+.tl-step:hover .tl-step__icon{transform:translateY(-2px);border-color:var(--accent-glow)}
+.tl-step--done .tl-step__icon{background:var(--green-soft);border-color:rgba(52,211,153,0.5)}
+.tl-step--current .tl-step__icon{background:var(--accent-soft);border-color:rgba(124,91,245,0.5);box-shadow:0 0 0 4px rgba(124,91,245,0.15)}
+.tl-step--future .tl-step__icon{opacity:0.55}
+.tl-step__dot{width:10px;height:10px;border-radius:50%;background:var(--border-accent);position:absolute;top:77px;right:6px;z-index:1}
+.tl-step--done .tl-step__dot{background:var(--green)}
+.tl-step--current .tl-step__dot{background:var(--accent-glow);box-shadow:0 0 8px rgba(157,124,255,0.6)}
+.tl-step__date{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px}
+.tl-step--done .tl-step__date{color:var(--green)}
+.tl-step--current .tl-step__date{color:var(--accent-glow)}
+.tl-step__title{font-size:13px;font-weight:700;color:var(--text-primary);line-height:1.35;margin-bottom:4px;padding-right:16px}
+.tl-step__desc{font-size:11.5px;color:var(--text-secondary);line-height:1.5;padding-right:16px}
+.tl-step--future .tl-step__title,.tl-step--future .tl-step__desc,.tl-step--future .tl-step__date{color:var(--text-muted)}
+.timeline-hint{margin-top:4px;padding:10px 18px;border-top:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-muted);letter-spacing:0.5px;text-align:right}
+
 /* ARCHITECTURE */
 .arch-levels{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
 .arch-level{background:rgba(255,255,255,0.025);border:1px solid var(--border-accent);border-radius:10px;padding:14px}
@@ -233,7 +255,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <div class="stat-card"><div class="stat-card__value">6</div><div class="stat-card__label" data-i18n="stat3"></div></div>
     <div class="stat-card"><div class="stat-card__value a">5</div><div class="stat-card__label" data-i18n="stat4"></div></div>
     <div class="stat-card"><div class="stat-card__value g">8</div><div class="stat-card__label" data-i18n="stat5"></div></div>
-    <div class="stat-card"><div class="stat-card__value">~6</div><div class="stat-card__label" data-i18n="stat6"></div></div>
+    <div class="stat-card"><div class="stat-card__value">~4</div><div class="stat-card__label" data-i18n="stat6"></div></div>
   </div>
 
   <!-- SECTION 00: ABOUT -->
@@ -250,10 +272,25 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     </div>
   </div>
 
-  <!-- SECTION 01: PHASE 0 — DISCOVERY -->
+  <!-- SECTION 01: TIMELINE — KEYPOINTS -->
   <div class="section">
     <div class="section__header">
       <span class="section__num">01</span>
+      <span class="section__title" data-i18n="tl_title"></span>
+      <span class="section__badge badge--active" data-i18n="tl_badge"></span>
+    </div>
+    <div class="section__card">
+      <div class="section__desc" data-i18n="tl_desc"></div>
+      <div class="timeline-wrap">
+        <div class="timeline" id="timeline-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 02: PHASE 0 — DISCOVERY -->
+  <div class="section">
+    <div class="section__header">
+      <span class="section__num">02</span>
       <span class="section__title" data-i18n="s01_title"></span>
       <span class="section__badge badge--done" data-i18n="s01_badge"></span>
     </div>
@@ -265,10 +302,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     </div>
   </div>
 
-  <!-- SECTION 02: GANTT CHART -->
+  <!-- SECTION 03: GANTT CHART -->
   <div class="section">
     <div class="section__header">
-      <span class="section__num">02</span>
+      <span class="section__num">03</span>
       <span class="section__title" data-i18n="s02_title"></span>
     </div>
     <div class="section__card">
@@ -288,10 +325,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     </div>
   </div>
 
-  <!-- SECTION 03: PHASE 1 -->
+  <!-- SECTION 04: PHASE 1 -->
   <div class="section">
     <div class="section__header">
-      <span class="section__num">03</span>
+      <span class="section__num">04</span>
       <span class="section__title" data-i18n="s03_title"></span>
       <span class="section__badge badge--active" data-i18n="s03_badge"></span>
     </div>
@@ -303,10 +340,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     </div>
   </div>
 
-  <!-- SECTION 04: PHASE 2 -->
+  <!-- SECTION 05: PHASE 2 -->
   <div class="section">
     <div class="section__header">
-      <span class="section__num">04</span>
+      <span class="section__num">05</span>
       <span class="section__title" data-i18n="s04_title"></span>
       <span class="section__badge badge--blue" data-i18n="s04_badge"></span>
     </div>
@@ -318,10 +355,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     </div>
   </div>
 
-  <!-- SECTION 05: PHASE 3 -->
+  <!-- SECTION 06: PHASE 3 -->
   <div class="section">
     <div class="section__header">
-      <span class="section__num">05</span>
+      <span class="section__num">06</span>
       <span class="section__title" data-i18n="s05_title"></span>
       <span class="section__badge badge--amber" data-i18n="s05_badge"></span>
     </div>
@@ -333,10 +370,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     </div>
   </div>
 
-  <!-- SECTION 06: AI ARCHITECTURE -->
+  <!-- SECTION 07: AI ARCHITECTURE -->
   <div class="section">
     <div class="section__header">
-      <span class="section__num">06</span>
+      <span class="section__num">07</span>
       <span class="section__title" data-i18n="s06_title"></span>
     </div>
     <div class="section__card">
@@ -345,10 +382,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     </div>
   </div>
 
-  <!-- SECTION 07: PARTNER SEGMENTS -->
+  <!-- SECTION 08: PARTNER SEGMENTS -->
   <div class="section">
     <div class="section__header">
-      <span class="section__num">07</span>
+      <span class="section__num">08</span>
       <span class="section__title" data-i18n="s07_title"></span>
     </div>
     <div class="section__card">
@@ -358,10 +395,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     </div>
   </div>
 
-  <!-- SECTION 08: KEY ENTITIES -->
+  <!-- SECTION 09: KEY ENTITIES -->
   <div class="section">
     <div class="section__header">
-      <span class="section__num">08</span>
+      <span class="section__num">09</span>
       <span class="section__title" data-i18n="s08_title"></span>
     </div>
     <div class="section__card">
@@ -392,8 +429,8 @@ const T = {
   ru: {
     badge: 'Внутренняя дорожная карта',
     header_sub: 'Проект автоматизации бизнес-процессов партнёрской программы 1XBET Serbia. Диаграмма Ганта, этапы внедрения и прогресс выполнения задач.',
-    meta_start: 'Старт проекта: 22 мая 2026',
-    meta_finish: 'Финал: 14 ноября 2026',
+    meta_start: 'Старт проекта: 15 апреля 2026',
+    meta_finish: 'Финал: 22 октября 2026',
     meta_team: 'Команда: 6 человек',
     meta_client: 'Клиент: 1XBET Serbia',
     stat1: 'Фазы реализации',
@@ -401,33 +438,33 @@ const T = {
     stat3: 'Сотрудников в команде',
     stat4: 'Модели сделок',
     stat5: 'Слоёв базы знаний',
-    stat6: 'Месяцев до финала',
+    stat6: 'мес. до финала',
     s00_title: 'О проекте',
     s00_badge: 'В работе',
     s00_desc: 'Бизнес 1XBET Serbia не оцифрован: знания сконцентрированы у одного человека, CRM отсутствует, процессы не задокументированы. Проект ИИ-визации переводит компанию с ручного режима на системный — с базой знаний, автоматизированным пайплайном партнёров и ИИ-контуром управления.',
-    s00_note: 'Цель: устранить узкое место (основатель), автоматизировать поиск и квалификацию партнёров, запустить ассистивную систему сверки.',
+    s00_note: 'Цель: перевести управление партнёрской программой с ручного режима на системный, автоматизировать поиск и квалификацию партнёров, запустить ассистивную систему сверки.',
     s00_note2: 'Можно автоматизировать: поиск и обогащение партнёров, первичный аутрич, шаблоны офферов, обучение команды, базу знаний, входящие заявки, подготовку к сверке, контент/SMM.',
     s01_title: 'Фаза 0 — Диагностика и проектирование',
     s01_badge: '✓ Завершено',
     s01_desc: 'Подготовительная фаза: глубокое погружение в бизнес, анализ точек автоматизации, проектирование архитектуры базы знаний и системной инструкции для ИИ-ассистента.',
-    s01_period: 'Апрель 2026 — до 21 мая 2026',
-    s01_note: 'Фаза полностью завершена до старта проекта 22 мая. Результат: готовая архитектура базы знаний (8 слоёв), карта процессов, приоритеты внедрения.',
+    s01_period: 'Апрель 2026 — 22 апреля 2026',
+    s01_note: 'Фаза полностью завершена до 22 апреля — за 3 недели. Результат: готовая архитектура базы знаний (8 слоёв), карта процессов, словарь 100 терминов, реестр 345 партнёров с метриками.',
     s02_title: 'Диаграмма Ганта — Полная дорожная карта',
     s02_desc: 'Визуальный таймлайн всего проекта от апреля по ноябрь 2026. Красная метка — текущая дата.',
     s03_title: 'Фаза 1 — Быстрые победы',
-    s03_badge: '▶ Старт 22 мая',
+    s03_badge: '▶ В работе',
     s03_desc: 'Фундамент системы: оцифровка ключевых процессов, первичная структура CRM и реестра партнёров. Без этих артефактов следующие фазы невозможны.',
-    s03_period: '22 мая — 19 июня 2026 · 4 недели',
+    s03_period: '22 апреля — 20 мая 2026 · 4 недели',
     s03_note: 'Приоритет: пайплайн-статусы и реестр партнёров — первые в работу. Шаблоны и FAQ — параллельно со второй недели.',
     s04_title: 'Фаза 2 — Ключевые системы',
-    s04_badge: 'Июнь – Август',
+    s04_badge: 'Май – Июль',
     s04_desc: 'Развёртывание полной базы знаний (8 слоёв), запуск ИИ-копилота для обучения команды, база партнёров со скорингом и ассистивная система сверки.',
-    s04_period: '23 июня — 14 августа 2026 · ~7 недель',
+    s04_period: '21 мая — 15 июля 2026 · ~8 недель',
     s04_note: 'База знаний строится в 3 волны (10 / 10 / 8 документов). ИИ-копилот подключается как только готовы первые 10 критичных документов.',
     s05_title: 'Фаза 3 — ИИ-масштабирование',
-    s05_badge: 'Авг – Ноябрь',
+    s05_badge: 'Июль – Октябрь',
     s05_desc: 'Полуавтоматический аутбаунд-пайплайн, система Health Score для удержания партнёров, SMM-автоматизация, BI-дашборд и итоговая мульти-агентная система.',
-    s05_period: '17 августа — 14 ноября 2026 · ~3 месяца',
+    s05_period: '16 июля — 22 октября 2026 · ~3.5 месяца',
     s05_note: 'Мульти-агентная система — финальный артефакт проекта. Включает 3 уровня: главный ассистент, доменные модули, контур управления.',
     s06_title: 'Архитектура ИИ-контура',
     s06_desc: 'Трёхуровневая архитектура: главный ассистент маршрутизирует запросы, доменные модули выполняют специализированные задачи, контур управления контролирует финансы и нестандартные сценарии.',
@@ -447,13 +484,16 @@ const T = {
     footer_left: 'AI Partner Program · 1XBET Serbia · 2026',
     footer_right: 'ИИ-визация проекта',
     today_label: 'СЕГОДНЯ',
-    gantt_months: ['АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ','НОЯ'],
+    gantt_months: ['АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ'],
+    tl_title: 'Хроника проекта',
+    tl_badge: '6 вех',
+    tl_desc: 'Ключевые достижения и ближайшие шаги. Прокрутите таймлайн горизонтально для просмотра всех вех.',
   },
   sr: {
     badge: 'Interna mapa puta',
     header_sub: 'Projekat automatizacije poslovnih procesa partnerskog programa 1XBET Serbia. Gantogram, faze implementacije i napredak realizacije zadataka.',
-    meta_start: 'Početak projekta: 22. maj 2026.',
-    meta_finish: 'Završetak: 14. novembar 2026.',
+    meta_start: 'Početak projekta: 15. april 2026.',
+    meta_finish: 'Završetak: 22. oktobar 2026.',
     meta_team: 'Tim: 6 osoba',
     meta_client: 'Klijent: 1XBET Serbia',
     stat1: 'Faze realizacije',
@@ -461,33 +501,33 @@ const T = {
     stat3: 'Članova tima',
     stat4: 'Modela saradnje',
     stat5: 'Slojeva baze znanja',
-    stat6: 'Meseci do finala',
+    stat6: 'mes. do finala',
     s00_title: 'O projektu',
     s00_badge: 'U toku',
     s00_desc: 'Poslovanje 1XBET Serbia nije digitalizovano: znanje je koncentrisano kod jedne osobe, CRM ne postoji, procesi nisu dokumentovani. AI vizacija projekta prevodi kompaniju iz ručnog u sistemski režim — uz bazu znanja, automatizovani pipeline partnera i AI upravljački kontur.',
-    s00_note: 'Cilj: eliminisati usko grlo (osnivač), automatizovati pronalaženje i kvalifikaciju partnera, pokrenuti asistentski sistem usaglašavanja.',
+    s00_note: 'Cilj: preći sa ručnog na sistemski režim upravljanja partnerskim programom, automatizovati pronalaženje i kvalifikaciju partnera, pokrenuti asistentski sistem usaglašavanja.',
     s00_note2: 'Može se automatizovati: pronalaženje i obogaćivanje partnera, inicijalni autbound, šabloni ponuda, obuka tima, baza znanja, dolazne prijave, priprema za usaglašavanje, sadržaj/SMM.',
     s01_title: 'Faza 0 — Dijagnostika i projektovanje',
     s01_badge: '✓ Završeno',
     s01_desc: 'Pripremna faza: duboko uranjanje u poslovanje, analiza tačaka automatizacije, projektovanje arhitekture baze znanja i sistemske instrukcije za AI asistenta.',
-    s01_period: 'April 2026. — do 21. maja 2026.',
-    s01_note: 'Faza je u potpunosti završena pre početka projekta 22. maja. Rezultat: gotova arhitektura baze znanja (8 slojeva), mapa procesa, prioriteti implementacije.',
+    s01_period: 'April 2026. — 22. april 2026.',
+    s01_note: 'Faza je u potpunosti završena do 22. aprila — za 3 nedelje. Rezultat: gotova arhitektura baze znanja (8 slojeva), mapa procesa, rečnik od 100 termina, registar od 345 partnera sa metrikama.',
     s02_title: 'Gantogram — Kompletna mapa puta',
     s02_desc: 'Vizuelna vremenska linija celog projekta od aprila do novembra 2026. Crvena oznaka — trenutni datum.',
     s03_title: 'Faza 1 — Brze pobede',
-    s03_badge: '▶ Start 22. maja',
+    s03_badge: '▶ U toku',
     s03_desc: 'Temelj sistema: digitalizacija ključnih procesa, osnovna struktura CRM-a i registra partnera. Bez ovih artefakata naredne faze nisu moguće.',
-    s03_period: '22. maj — 19. jun 2026. · 4 nedelje',
+    s03_period: '22. april — 20. maj 2026. · 4 nedelje',
     s03_note: 'Prioritet: statusi pipelina i registar partnera — prvi u rad. Šabloni i FAQ — paralelno od druge nedelje.',
     s04_title: 'Faza 2 — Ključni sistemi',
-    s04_badge: 'Jun – Avgust',
+    s04_badge: 'Maj – Jul',
     s04_desc: 'Implementacija kompletne baze znanja (8 slojeva), pokretanje AI kopilota za obuku tima, baza partnera sa skoringom i asistentski sistem usaglašavanja.',
-    s04_period: '23. jun — 14. avgust 2026. · ~7 nedelja',
+    s04_period: '21. maj — 15. jul 2026. · ~8 nedelja',
     s04_note: 'Baza znanja se gradi u 3 talasa (10 / 10 / 8 dokumenata). AI kopilot se povezuje čim su gotovi prvih 10 kritičnih dokumenata.',
     s05_title: 'Faza 3 — AI skaliranje',
-    s05_badge: 'Avg – Novembar',
+    s05_badge: 'Jul – Oktobar',
     s05_desc: 'Polu-automatski autbound pipeline, sistem Health Score za zadržavanje partnera, SMM automatizacija, BI dashboard i finalni multi-agentni sistem.',
-    s05_period: '17. avgust — 14. novembar 2026. · ~3 meseca',
+    s05_period: '16. jul — 22. oktobar 2026. · ~3.5 meseca',
     s05_note: 'Multi-agentni sistem — finalni artefakt projekta. Uključuje 3 nivoa: glavni asistent, domenski moduli, upravljački kontur.',
     s06_title: 'Arhitektura AI sistema',
     s06_desc: 'Tronivоjna arhitektura: glavni asistent rutira zahteve, domenski moduli obavljaju specijalizovane zadatke, upravljački kontur kontroliše finansije i nestandardne scenarije.',
@@ -507,7 +547,10 @@ const T = {
     footer_left: 'AI Partner Program · 1XBET Serbia · 2026',
     footer_right: 'AI vizacija projekta',
     today_label: 'DANAS',
-    gantt_months: ['APR','MAJ','JUN','JUL','AVG','SEP','OKT','NOV'],
+    gantt_months: ['APR','MAJ','JUN','JUL','AVG','SEP','OKT'],
+    tl_title: 'Hronika projekta',
+    tl_badge: '6 prekretnica',
+    tl_desc: 'Ključna dostignuća i sledeći koraci. Prevucite vremensku liniju horizontalno za pregled svih prekretnica.',
   }
 };
 
@@ -515,66 +558,66 @@ const T = {
 const CHECKLIST = {
   ru: {
     phase0: [
-      { id:'p0-1', text:'Диагностика бизнеса', sub:'Анализ бизнес-модели, команды, болей и текущего состояния процессов 1XBET Serbia', tag:'tag--g', tagText:'Выполнено' },
-      { id:'p0-2', text:'Аудит точек для ИИ и автоматизации', sub:'Определены 10 процессов под автоматизацию и 6 процессов, требующих человека', tag:'tag--g', tagText:'Выполнено' },
-      { id:'p0-3', text:'Проектирование структуры базы знаний', sub:'Архитектура из 8 слоёв и 10 папок, 28 приоритетных документов в 3 волны', tag:'tag--g', tagText:'Выполнено' },
-      { id:'p0-4', text:'Проектирование системной инструкции', sub:'Правила качества базы знаний, форматы хранения, структура паспортов сущностей', tag:'tag--g', tagText:'Выполнено' },
-      { id:'p0-5', text:'Сборка дорожной карты внедрения', sub:'Три горизонта: quick wins (2–4 нед.), средний (1–2 мес.), масштаб (3–6 мес.)', tag:'tag--g', tagText:'Выполнено' },
+      { id:'p0-1', done:true, text:'Диагностика бизнеса', sub:'Анализ бизнес-модели, команды, болей и текущего состояния процессов 1XBET Serbia', tag:'tag--g', tagText:'Выполнено' },
+      { id:'p0-2', done:true, text:'Аудит точек для ИИ и автоматизации', sub:'Определены 10 процессов под автоматизацию и 6 процессов, требующих человека', tag:'tag--g', tagText:'Выполнено' },
+      { id:'p0-3', done:true, text:'Проектирование структуры базы знаний', sub:'Архитектура из 8 слоёв и 10 папок, 28 приоритетных документов в 3 волны', tag:'tag--g', tagText:'Выполнено' },
+      { id:'p0-4', done:true, text:'Проектирование системной инструкции', sub:'Правила качества базы знаний, форматы хранения, структура паспортов сущностей', tag:'tag--g', tagText:'Выполнено' },
+      { id:'p0-5', done:true, text:'Сборка дорожной карты внедрения', sub:'Три горизонта: quick wins (2–4 нед.), средний (1–2 мес.), масштаб (3–6 мес.)', tag:'tag--g', tagText:'Выполнено' },
     ],
     phase1: [
-      { id:'p1-1', text:'Статусы пайплайна в CRM', sub:'Определить и зафиксировать статусы партнёра на всех этапах воронки', tag:'tag--p', tagText:'22–28 мая' },
-      { id:'p1-2', text:'Реестр партнёров — базовая версия', sub:'Google Sheets / Airtable: имя, сегмент, модель, статус, менеджер, условия', tag:'tag--p', tagText:'22 мая – 4 июня' },
-      { id:'p1-3', text:'Шаблоны по ключевым процессам', sub:'Поиск партнёра, первый контакт, онбординг, напоминания, эскалация', tag:'tag--p', tagText:'29 мая – 11 июня' },
-      { id:'p1-4', text:'FAQ для команды продаж', sub:'50+ вопрос/ответ: модели сделок, возражения, условия, метрики', tag:'tag--p', tagText:'2–11 июня' },
-      { id:'p1-5', text:'Шаблон запроса на выплату', sub:'Стандартизированный документ для согласования и контроля выплат партнёрам', tag:'tag--p', tagText:'2–7 июня' },
-      { id:'p1-6', text:'Регламенты по сверке', sub:'Методология расчёта CPA/RevShare/Hybrid, формулы, шаблоны сверки', tag:'tag--p', tagText:'5–19 июня' },
-      { id:'p1-7', text:'Трекинг входящих заявок', sub:'Форма + таблица для входящих: источник, сегмент, контакт, дата, статус, менеджер', tag:'tag--p', tagText:'29 мая – 19 июня' },
+      { id:'p1-1', text:'Статусы пайплайна в CRM', sub:'Определить и зафиксировать статусы партнёра на всех этапах воронки', tag:'tag--p', tagText:'22–28 апреля' },
+      { id:'p1-2', done:true, text:'Реестр партнёров с метриками', sub:'Реестр 345 партнёров со всеми сегментами и моделями сделок. Автоматическое обогащение метриками (Deposit, FTD, Reg2Dep) через Google Sheets API.', tag:'tag--p', tagText:'22 апр – 5 мая' },
+      { id:'p1-3', text:'Шаблоны по ключевым процессам', sub:'Поиск партнёра, первый контакт, онбординг, напоминания, эскалация', tag:'tag--p', tagText:'29 апреля – 12 мая' },
+      { id:'p1-4', text:'FAQ для команды продаж', sub:'50+ вопрос/ответ: модели сделок, возражения, условия, метрики', tag:'tag--p', tagText:'2–12 мая' },
+      { id:'p1-5', text:'Шаблон запроса на выплату', sub:'Стандартизированный документ для согласования и контроля выплат партнёрам', tag:'tag--p', tagText:'2–7 мая' },
+      { id:'p1-6', text:'Регламенты по сверке', sub:'Методология расчёта CPA/RevShare/Hybrid, формулы, шаблоны сверки', tag:'tag--p', tagText:'6–20 мая' },
+      { id:'p1-7', text:'Трекинг входящих заявок', sub:'Форма + таблица для входящих: источник, сегмент, контакт, дата, статус, менеджер', tag:'tag--p', tagText:'29 апр – 20 мая' },
     ],
     phase2: [
-      { id:'p2-1', text:'Развёртывание базы знаний (8 слоёв)', sub:'Волна 1 (10 критичных документов): паспорт бизнеса, словарь, матрица сегментов, регламенты', tag:'tag--b', tagText:'23 июня – 18 июля' },
-      { id:'p2-2', text:'ИИ-копилот для обучения команды', sub:'Системная инструкция + база знаний → Claude-ассистент для ответов на вопросы сотрудников', tag:'tag--b', tagText:'30 июня – 25 июля' },
-      { id:'p2-3', text:'База партнёров со скорингом', sub:'Модель скоринга по 6 факторам: сегмент, трафик, конверсия, история, коммуникация, риск', tag:'tag--b', tagText:'7 июля – 1 авг' },
-      { id:'p2-4', text:'Автоматизация коммерческих материалов', sub:'Генератор КП и офферов на основе сегмента партнёра, модели сделки и трафика', tag:'tag--b', tagText:'14 июля – 1 авг' },
-      { id:'p2-5', text:'Ассистивная система сверки', sub:'Умный контроллер расчётов: проверяет формулы, выявляет аномалии, НЕ заменяет финального решения', tag:'tag--b', tagText:'21 июля – 14 авг' },
+      { id:'p2-1', text:'Развёртывание базы знаний (8 слоёв)', sub:'Волна 1 (10 критичных документов): паспорт бизнеса, словарь, матрица сегментов, регламенты', tag:'tag--b', tagText:'21 мая – 18 июня' },
+      { id:'p2-2', text:'ИИ-копилот для обучения команды', sub:'Системная инструкция + база знаний → Claude-ассистент для ответов на вопросы сотрудников', tag:'tag--b', tagText:'28 мая – 25 июня' },
+      { id:'p2-3', text:'База партнёров со скорингом', sub:'Модель скоринга по 6 факторам: сегмент, трафик, конверсия, история, коммуникация, риск', tag:'tag--b', tagText:'4 июня – 2 июля' },
+      { id:'p2-4', text:'Автоматизация коммерческих материалов', sub:'Генератор КП и офферов на основе сегмента партнёра, модели сделки и трафика', tag:'tag--b', tagText:'11 июня – 2 июля' },
+      { id:'p2-5', text:'Ассистивная система сверки', sub:'Умный контроллер расчётов: проверяет формулы, выявляет аномалии, НЕ заменяет финального решения', tag:'tag--b', tagText:'18 июня – 15 июля' },
     ],
     phase3: [
-      { id:'p3-1', text:'Полуавтоматический аутбаунд-пайплайн', sub:'ИИ-поиск и обогащение лидов, автоматический первичный аутрич, квалификация, CRM-интеграция', tag:'tag--a', tagText:'17 авг – 26 сент' },
-      { id:'p3-2', text:'Система Health Score партнёров', sub:'Индекс здоровья по метрикам: активность, объём, качество трафика, коммуникация, тренды', tag:'tag--a', tagText:'7 сент – 17 окт' },
-      { id:'p3-3', text:'SMM-автоматизация', sub:'Контент-план, генерация постов, адаптация под Telegram/Instagram, расписание публикаций', tag:'tag--a', tagText:'21 сент – 1 ноя' },
-      { id:'p3-4', text:'BI-алерты и дашборд аналитики', sub:'Автоматические уведомления при аномалиях: просадка FTD, изменение конверсии, задержки выплат', tag:'tag--a', tagText:'28 сент – 31 окт' },
-      { id:'p3-5', text:'Мульти-агентная система', sub:'Три уровня: главный ассистент → доменные модули (5 агентов) → контур управления', tag:'tag--a', tagText:'12 окт – 14 ноя' },
+      { id:'p3-1', text:'Полуавтоматический аутбаунд-пайплайн', sub:'ИИ-поиск и обогащение лидов, автоматический первичный аутрич, квалификация, CRM-интеграция', tag:'tag--a', tagText:'16 июля – 27 авг' },
+      { id:'p3-2', text:'Система Health Score партнёров', sub:'Индекс здоровья по метрикам: активность, объём, качество трафика, коммуникация, тренды', tag:'tag--a', tagText:'13 авг – 24 сент' },
+      { id:'p3-3', text:'SMM-автоматизация', sub:'Контент-план, генерация постов, адаптация под Telegram/Instagram, расписание публикаций', tag:'tag--a', tagText:'3 сент – 8 окт' },
+      { id:'p3-4', text:'BI-алерты и дашборд аналитики', sub:'Автоматические уведомления при аномалиях: просадка FTD, изменение конверсии, задержки выплат', tag:'tag--a', tagText:'10 сент – 8 окт' },
+      { id:'p3-5', text:'Мульти-агентная система', sub:'Три уровня: главный ассистент → доменные модули (5 агентов) → контур управления', tag:'tag--a', tagText:'22 сент – 22 окт' },
     ],
   },
   sr: {
     phase0: [
-      { id:'p0-1', text:'Dijagnostika poslovanja', sub:'Analiza poslovnog modela, tima, bolnih tačaka i trenutnog stanja procesa 1XBET Serbia', tag:'tag--g', tagText:'Završeno' },
-      { id:'p0-2', text:'Revizija tačaka za AI i automatizaciju', sub:'Identifikovano 10 procesa za automatizaciju i 6 procesa koji zahtevaju čoveka', tag:'tag--g', tagText:'Završeno' },
-      { id:'p0-3', text:'Projektovanje strukture baze znanja', sub:'Arhitektura od 8 slojeva i 10 foldera, 28 prioritetnih dokumenata u 3 talasa', tag:'tag--g', tagText:'Završeno' },
-      { id:'p0-4', text:'Projektovanje sistemske instrukcije', sub:'Pravila kvaliteta baze znanja, formati skladištenja, struktura pasoša entiteta', tag:'tag--g', tagText:'Završeno' },
-      { id:'p0-5', text:'Izrada mape puta implementacije', sub:'Tri horizonta: brze pobede (2–4 ned.), srednji (1–2 mes.), skaliranje (3–6 mes.)', tag:'tag--g', tagText:'Završeno' },
+      { id:'p0-1', done:true, text:'Dijagnostika poslovanja', sub:'Analiza poslovnog modela, tima, bolnih tačaka i trenutnog stanja procesa 1XBET Serbia', tag:'tag--g', tagText:'Završeno' },
+      { id:'p0-2', done:true, text:'Revizija tačaka za AI i automatizaciju', sub:'Identifikovano 10 procesa za automatizaciju i 6 procesa koji zahtevaju čoveka', tag:'tag--g', tagText:'Završeno' },
+      { id:'p0-3', done:true, text:'Projektovanje strukture baze znanja', sub:'Arhitektura od 8 slojeva i 10 foldera, 28 prioritetnih dokumenata u 3 talasa', tag:'tag--g', tagText:'Završeno' },
+      { id:'p0-4', done:true, text:'Projektovanje sistemske instrukcije', sub:'Pravila kvaliteta baze znanja, formati skladištenja, struktura pasoša entiteta', tag:'tag--g', tagText:'Završeno' },
+      { id:'p0-5', done:true, text:'Izrada mape puta implementacije', sub:'Tri horizonta: brze pobede (2–4 ned.), srednji (1–2 mes.), skaliranje (3–6 mes.)', tag:'tag--g', tagText:'Završeno' },
     ],
     phase1: [
-      { id:'p1-1', text:'Statusi pipelina u CRM-u', sub:'Definisati i utvrditi statuse partnera na svim fazama levka', tag:'tag--p', tagText:'22–28. maj' },
-      { id:'p1-2', text:'Registar partnera — osnovna verzija', sub:'Google Sheets / Airtable: ime, segment, model, status, menadžer, uslovi', tag:'tag--p', tagText:'22. maj – 4. jun' },
-      { id:'p1-3', text:'Šabloni za ključne procese', sub:'Pronalaženje partnera, prvi kontakt, onboarding, podsetnici, eskalacija', tag:'tag--p', tagText:'29. maj – 11. jun' },
-      { id:'p1-4', text:'FAQ za prodajni tim', sub:'50+ pitanje/odgovor: modeli saradnje, prigovori, uslovi, metrike', tag:'tag--p', tagText:'2–11. jun' },
-      { id:'p1-5', text:'Šablon zahteva za isplatu', sub:'Standardizovani dokument za odobravanje i kontrolu isplata partnerima', tag:'tag--p', tagText:'2–7. jun' },
-      { id:'p1-6', text:'Pravilnici za usaglašavanje', sub:'Metodologija izračunavanja CPA/RevShare/Hybrid, formule, šabloni usaglašavanja', tag:'tag--p', tagText:'5–19. jun' },
-      { id:'p1-7', text:'Praćenje dolaznih zahteva', sub:'Forma + tabela za dolazne: izvor, segment, kontakt, datum, status, menadžer', tag:'tag--p', tagText:'29. maj – 19. jun' },
+      { id:'p1-1', text:'Statusi pipelina u CRM-u', sub:'Definisati i utvrditi statuse partnera na svim fazama levka', tag:'tag--p', tagText:'22–28. april' },
+      { id:'p1-2', done:true, text:'Registar partnera sa metrikama', sub:'Registar od 345 partnera sa svim segmentima i modelima saradnje. Automatsko obogaćivanje metrikama (Deposit, FTD, Reg2Dep) preko Google Sheets API-ja.', tag:'tag--p', tagText:'22. apr – 5. maj' },
+      { id:'p1-3', text:'Šabloni za ključne procese', sub:'Pronalaženje partnera, prvi kontakt, onboarding, podsetnici, eskalacija', tag:'tag--p', tagText:'29. april – 12. maj' },
+      { id:'p1-4', text:'FAQ za prodajni tim', sub:'50+ pitanje/odgovor: modeli saradnje, prigovori, uslovi, metrike', tag:'tag--p', tagText:'2–12. maj' },
+      { id:'p1-5', text:'Šablon zahteva za isplatu', sub:'Standardizovani dokument za odobravanje i kontrolu isplata partnerima', tag:'tag--p', tagText:'2–7. maj' },
+      { id:'p1-6', text:'Pravilnici za usaglašavanje', sub:'Metodologija izračunavanja CPA/RevShare/Hybrid, formule, šabloni usaglašavanja', tag:'tag--p', tagText:'6–20. maj' },
+      { id:'p1-7', text:'Praćenje dolaznih zahteva', sub:'Forma + tabela za dolazne: izvor, segment, kontakt, datum, status, menadžer', tag:'tag--p', tagText:'29. apr – 20. maj' },
     ],
     phase2: [
-      { id:'p2-1', text:'Implementacija baze znanja (8 slojeva)', sub:'Talas 1 (10 kritičnih dokumenata): pasoš poslovanja, rečnik, matrica segmenata, pravilnici', tag:'tag--b', tagText:'23. jun – 18. jul' },
-      { id:'p2-2', text:'AI kopilot za obuku tima', sub:'Sistemska instrukcija + baza znanja → Claude asistent za odgovore na pitanja zaposlenih', tag:'tag--b', tagText:'30. jun – 25. jul' },
-      { id:'p2-3', text:'Baza partnera sa skoringom', sub:'Model skoringa po 6 faktora: segment, saobraćaj, konverzija, istorija, komunikacija, rizik', tag:'tag--b', tagText:'7. jul – 1. avg' },
-      { id:'p2-4', text:'Automatizacija komercijalnih materijala', sub:'Generator ponuda i offera na osnovu segmenta partnera, modela saradnje i saobraćaja', tag:'tag--b', tagText:'14. jul – 1. avg' },
-      { id:'p2-5', text:'Asistentski sistem usaglašavanja', sub:'Pametni kontrolor izračunavanja: proverava formule, otkriva anomalije, NE zamenjuje finalne odluke', tag:'tag--b', tagText:'21. jul – 14. avg' },
+      { id:'p2-1', text:'Implementacija baze znanja (8 slojeva)', sub:'Talas 1 (10 kritičnih dokumenata): pasoš poslovanja, rečnik, matrica segmenata, pravilnici', tag:'tag--b', tagText:'21. maj – 18. jun' },
+      { id:'p2-2', text:'AI kopilot za obuku tima', sub:'Sistemska instrukcija + baza znanja → Claude asistent za odgovore na pitanja zaposlenih', tag:'tag--b', tagText:'28. maj – 25. jun' },
+      { id:'p2-3', text:'Baza partnera sa skoringom', sub:'Model skoringa po 6 faktora: segment, saobraćaj, konverzija, istorija, komunikacija, rizik', tag:'tag--b', tagText:'4. jun – 2. jul' },
+      { id:'p2-4', text:'Automatizacija komercijalnih materijala', sub:'Generator ponuda i offera na osnovu segmenta partnera, modela saradnje i saobraćaja', tag:'tag--b', tagText:'11. jun – 2. jul' },
+      { id:'p2-5', text:'Asistentski sistem usaglašavanja', sub:'Pametni kontrolor izračunavanja: proverava formule, otkriva anomalije, NE zamenjuje finalne odluke', tag:'tag--b', tagText:'18. jun – 15. jul' },
     ],
     phase3: [
-      { id:'p3-1', text:'Polu-automatski autbound pipeline', sub:'AI pronalaženje i obogaćivanje lidova, automatski inicijalni autbound, kvalifikacija, CRM integracija', tag:'tag--a', tagText:'17. avg – 26. sept' },
-      { id:'p3-2', text:'Sistem Health Score partnera', sub:'Indeks zdravlja po metrikama: aktivnost, obim, kvalitet saobraćaja, komunikacija, trendovi', tag:'tag--a', tagText:'7. sept – 17. okt' },
-      { id:'p3-3', text:'SMM automatizacija', sub:'Plan sadržaja, generisanje postova, adaptacija za Telegram/Instagram, raspored objavljivanja', tag:'tag--a', tagText:'21. sept – 1. nov' },
-      { id:'p3-4', text:'BI alarmi i analitički dashboard', sub:'Automatska obaveštenja pri anomalijama: pad FTD, promena konverzije, kašnjenje isplata', tag:'tag--a', tagText:'28. sept – 31. okt' },
-      { id:'p3-5', text:'Multi-agentni sistem', sub:'Tri nivoa: glavni asistent → domenski moduli (5 agenata) → upravljački kontur', tag:'tag--a', tagText:'12. okt – 14. nov' },
+      { id:'p3-1', text:'Polu-automatski autbound pipeline', sub:'AI pronalaženje i obogaćivanje lidova, automatski inicijalni autbound, kvalifikacija, CRM integracija', tag:'tag--a', tagText:'16. jul – 27. avg' },
+      { id:'p3-2', text:'Sistem Health Score partnera', sub:'Indeks zdravlja po metrikama: aktivnost, obim, kvalitet saobraćaja, komunikacija, trendovi', tag:'tag--a', tagText:'13. avg – 24. sept' },
+      { id:'p3-3', text:'SMM automatizacija', sub:'Plan sadržaja, generisanje postova, adaptacija za Telegram/Instagram, raspored objavljivanja', tag:'tag--a', tagText:'3. sept – 8. okt' },
+      { id:'p3-4', text:'BI alarmi i analitički dashboard', sub:'Automatska obaveštenja pri anomalijama: pad FTD, promena konverzije, kašnjenje isplata', tag:'tag--a', tagText:'10. sept – 8. okt' },
+      { id:'p3-5', text:'Multi-agentni sistem', sub:'Tri nivoa: glavni asistent → domenski moduli (5 agenata) → upravljački kontur', tag:'tag--a', tagText:'22. sept – 22. okt' },
     ],
   }
 };
@@ -654,83 +697,126 @@ const ENTITIES = {
 };
 
 // ─── GANTT DATA ──────────────────────────────────────────────────────────────
-// Timeline: April 1 → November 14, 2026 = 228 days (day 0 = Apr 1)
-// left% = day/228*100, width% = duration/228*100
+// Timeline: April 15 → October 22, 2026 = 190 days (day 0 = Apr 15)
+// left% = day/190*100, width% = duration/190*100
 
 const GANTT_TASKS = {
   ru: [
     { group:'ФАЗА 0 · ДИАГНОСТИКА', cls:'bar--ph0', tasks:[
-      { lbl:'Диагностика бизнеса',      l:0.00, w:4.39 },
-      { lbl:'Аудит точек ИИ',           l:2.63, w:5.26 },
-      { lbl:'Архитектура базы знаний',  l:5.26, w:7.02 },
-      { lbl:'Системная инструкция',     l:8.77, w:6.58 },
-      { lbl:'Дорожная карта',           l:14.91,w:7.46 },
+      { lbl:'Диагностика бизнеса',      l:0.00, w:5.27 },
+      { lbl:'Аудит точек ИИ',           l:3.16, w:6.31 },
+      { lbl:'Архитектура базы знаний',  l:6.31, w:8.42 },
+      { lbl:'Системная инструкция',     l:10.52,w:7.90 },
+      { lbl:'Дорожная карта',           l:17.89,w:8.95 },
     ]},
     { group:'ФАЗА 1 · БЫСТРЫЕ ПОБЕДЫ', cls:'bar--ph1', tasks:[
-      { lbl:'Статусы пайплайна',        l:22.37,w:3.07 },
-      { lbl:'Реестр партнёров',         l:22.37,w:6.14 },
-      { lbl:'Шаблоны процессов',        l:25.44,w:6.14 },
-      { lbl:'FAQ для продаж',           l:27.19,w:4.39 },
-      { lbl:'Шаблон выплат',            l:27.19,w:2.63 },
-      { lbl:'Регламенты сверки',        l:28.51,w:6.58 },
-      { lbl:'Трекинг заявок',           l:25.44,w:9.65 },
+      { lbl:'Статусы пайплайна',        l:26.84,w:3.68 },
+      { lbl:'Реестр партнёров',         l:26.84,w:7.37 },
+      { lbl:'Шаблоны процессов',        l:30.53,w:7.37 },
+      { lbl:'FAQ для продаж',           l:32.63,w:5.27 },
+      { lbl:'Шаблон выплат',            l:32.63,w:3.16 },
+      { lbl:'Регламенты сверки',        l:34.21,w:7.90 },
+      { lbl:'Трекинг заявок',           l:30.53,w:11.58},
     ]},
     { group:'ФАЗА 2 · КЛЮЧЕВЫЕ СИСТЕМЫ', cls:'bar--ph2', tasks:[
-      { lbl:'База знаний',              l:36.40,w:11.40},
-      { lbl:'ИИ-копилот обучения',      l:39.47,w:11.40},
-      { lbl:'База партнёров+скоринг',   l:42.54,w:11.40},
-      { lbl:'Комм. материалы',          l:45.61,w:8.33 },
-      { lbl:'Система сверки',           l:48.68,w:10.96},
+      { lbl:'База знаний',              l:43.68,w:13.68},
+      { lbl:'ИИ-копилот обучения',      l:47.36,w:13.68},
+      { lbl:'База партнёров+скоринг',   l:51.05,w:13.68},
+      { lbl:'Комм. материалы',          l:54.73,w:10.00},
+      { lbl:'Система сверки',           l:58.42,w:13.15},
     ]},
     { group:'ФАЗА 3 · ИИ-МАСШТАБИРОВАНИЕ', cls:'bar--ph3', tasks:[
-      { lbl:'Аутбаунд-пайплайн',        l:60.53,w:17.98},
-      { lbl:'Health Score',             l:69.74,w:17.98},
-      { lbl:'SMM-автоматизация',        l:75.88,w:18.42},
-      { lbl:'BI-алерты',                l:78.95,w:14.91},
-      { lbl:'Мульти-агент',             l:85.09,w:14.91},
+      { lbl:'Аутбаунд-пайплайн',        l:72.64,w:21.58},
+      { lbl:'Health Score',             l:83.69,w:21.58},
+      { lbl:'SMM-автоматизация',        l:91.06,w:22.10},
+      { lbl:'BI-алерты',                l:94.74,w:17.89},
+      { lbl:'Мульти-агент',             l:102.11,w:17.89},
     ]},
   ],
   sr: [
     { group:'FAZA 0 · DIJAGNOSTIKA', cls:'bar--ph0', tasks:[
-      { lbl:'Dijagnostika poslovanja',  l:0.00, w:4.39 },
-      { lbl:'Revizija AI tačaka',       l:2.63, w:5.26 },
-      { lbl:'Arhitektura baze znanja',  l:5.26, w:7.02 },
-      { lbl:'Sistemska instrukcija',    l:8.77, w:6.58 },
-      { lbl:'Mapa puta',                l:14.91,w:7.46 },
+      { lbl:'Dijagnostika poslovanja',  l:0.00, w:5.27 },
+      { lbl:'Revizija AI tačaka',       l:3.16, w:6.31 },
+      { lbl:'Arhitektura baze znanja',  l:6.31, w:8.42 },
+      { lbl:'Sistemska instrukcija',    l:10.52,w:7.90 },
+      { lbl:'Mapa puta',                l:17.89,w:8.95 },
     ]},
     { group:'FAZA 1 · BRZE POBEDE', cls:'bar--ph1', tasks:[
-      { lbl:'Statusi pipelina',         l:22.37,w:3.07 },
-      { lbl:'Registar partnera',        l:22.37,w:6.14 },
-      { lbl:'Šabloni procesa',          l:25.44,w:6.14 },
-      { lbl:'FAQ za prodaju',           l:27.19,w:4.39 },
-      { lbl:'Šablon isplate',           l:27.19,w:2.63 },
-      { lbl:'Pravilnici sravnjivanja',  l:28.51,w:6.58 },
-      { lbl:'Praćenje prijava',         l:25.44,w:9.65 },
+      { lbl:'Statusi pipelina',         l:26.84,w:3.68 },
+      { lbl:'Registar partnera',        l:26.84,w:7.37 },
+      { lbl:'Šabloni procesa',          l:30.53,w:7.37 },
+      { lbl:'FAQ za prodaju',           l:32.63,w:5.27 },
+      { lbl:'Šablon isplate',           l:32.63,w:3.16 },
+      { lbl:'Pravilnici sravnjivanja',  l:34.21,w:7.90 },
+      { lbl:'Praćenje prijava',         l:30.53,w:11.58},
     ]},
     { group:'FAZA 2 · KLJUČNI SISTEMI', cls:'bar--ph2', tasks:[
-      { lbl:'Baza znanja',              l:36.40,w:11.40},
-      { lbl:'AI kopilot obuke',         l:39.47,w:11.40},
-      { lbl:'Baza partnera+skoring',    l:42.54,w:11.40},
-      { lbl:'Kom. materijali',          l:45.61,w:8.33 },
-      { lbl:'Sistem usaglašavanja',     l:48.68,w:10.96},
+      { lbl:'Baza znanja',              l:43.68,w:13.68},
+      { lbl:'AI kopilot obuke',         l:47.36,w:13.68},
+      { lbl:'Baza partnera+skoring',    l:51.05,w:13.68},
+      { lbl:'Kom. materijali',          l:54.73,w:10.00},
+      { lbl:'Sistem usaglašavanja',     l:58.42,w:13.15},
     ]},
     { group:'FAZA 3 · AI SKALIRANJE', cls:'bar--ph3', tasks:[
-      { lbl:'Autbound pipeline',        l:60.53,w:17.98},
-      { lbl:'Health Score',             l:69.74,w:17.98},
-      { lbl:'SMM automatizacija',       l:75.88,w:18.42},
-      { lbl:'BI alarmi',                l:78.95,w:14.91},
-      { lbl:'Multi-agentni sistem',     l:85.09,w:14.91},
+      { lbl:'Autbound pipeline',        l:72.64,w:21.58},
+      { lbl:'Health Score',             l:83.69,w:21.58},
+      { lbl:'SMM automatizacija',       l:91.06,w:22.10},
+      { lbl:'BI alarmi',                l:94.74,w:17.89},
+      { lbl:'Multi-agentni sistem',     l:102.11,w:17.89},
     ]},
   ]
 };
 
-// ─── MONTH WIDTHS (% of 228 days) ────────────────────────────────────────────
-const MONTHS_W = [13.16, 13.60, 13.16, 13.60, 13.60, 13.16, 13.60, 6.14];
-// Starts at: [0, 13.16, 26.75, 39.91, 53.51, 67.11, 80.26, 93.86]
-const MONTHS_STARTS = [0, 13.16, 26.75, 39.91, 53.51, 67.11, 80.26, 93.86];
+const TIMELINE = {
+  ru: [
+    { date:'15 апреля', icon:'🔍', status:'done',
+      title:'Старт и глубокая диагностика',
+      desc:'Анализ бизнес-модели, команды, болей и болевых точек. Картирование процессов 1XBET Serbia.' },
+    { date:'18 апреля', icon:'🏛️', status:'done',
+      title:'Архитектура базы знаний',
+      desc:'Спроектирована архитектура из 8 слоёв и 10 папок. 28 приоритетных документов разбиты на 3 волны внедрения.' },
+    { date:'20 апреля', icon:'📇', status:'done',
+      title:'Реестр 345 партнёров',
+      desc:'Все партнёры оцифрованы: сегмент, модель сделки, менеджер, статус. Единый источник истины для команды.' },
+    { date:'22 апреля', icon:'📖', status:'done',
+      title:'Словарь 100 терминов + метрики',
+      desc:'Полный словарь индустрии в 10 блоках. Обогащение реестра метриками через Google Sheets API (2760 ячеек).' },
+    { date:'27 апреля', icon:'📨', status:'current',
+      title:'Первый автономный дайджест',
+      desc:'Еженедельный AI-дайджест по партнёрской программе в Telegram. Мониторинг аномалий и ключевых метрик.' },
+    { date:'Май', icon:'🎓', status:'future',
+      title:'AI-копилот для команды',
+      desc:'Claude-ассистент с доступом к базе знаний отвечает на вопросы менеджеров. Снижение нагрузки на основателя.' },
+  ],
+  sr: [
+    { date:'15. april', icon:'🔍', status:'done',
+      title:'Početak i duboka dijagnostika',
+      desc:'Analiza poslovnog modela, tima, bolnih tačaka i procesa. Kartografija procesa 1XBET Serbia.' },
+    { date:'18. april', icon:'🏛️', status:'done',
+      title:'Arhitektura baze znanja',
+      desc:'Projektovana arhitektura od 8 slojeva i 10 foldera. 28 prioritetnih dokumenata podeljeno u 3 talasa implementacije.' },
+    { date:'20. april', icon:'📇', status:'done',
+      title:'Registar 345 partnera',
+      desc:'Svi partneri digitalizovani: segment, model saradnje, menadžer, status. Jedinstven izvor istine za tim.' },
+    { date:'22. april', icon:'📖', status:'done',
+      title:'Rečnik 100 termina + metrike',
+      desc:'Kompletan rečnik industrije u 10 blokova. Obogaćivanje registra metrikama preko Google Sheets API (2760 ćelija).' },
+    { date:'27. april', icon:'📨', status:'current',
+      title:'Prvi autonomni digest',
+      desc:'Nedeljni AI digest o partnerskom programu u Telegramu. Monitoring anomalija i ključnih metrika.' },
+    { date:'Maj', icon:'🎓', status:'future',
+      title:'AI kopilot za tim',
+      desc:'Claude asistent sa pristupom bazi znanja odgovara na pitanja menadžera. Smanjenje opterećenja osnivača.' },
+  ]
+};
 
-// Today = April 18, 2026 → day 17 → 7.46%
-const TODAY_PCT = 7.46;
+// ─── MONTH WIDTHS (% of 190 days) ────────────────────────────────────────────
+const MONTHS_W = [7.89, 16.32, 15.79, 16.32, 16.32, 15.79, 11.58];
+// Starts at: [0, 7.89, 24.21, 40.00, 56.32, 72.64, 88.43]
+const MONTHS_STARTS = [0, 7.89, 24.21, 40.00, 56.32, 72.64, 88.43];
+
+// Today = April 22, 2026 → day 7 → 3.68%
+const TODAY_PCT = 3.68;
 
 // ─── STATE ───────────────────────────────────────────────────────────────────
 const STORAGE_KEY = 'ai_partner_program_v1';
@@ -747,6 +833,7 @@ function renderChecklist(containerId, tasks) {
     const div = document.createElement('div');
     div.className = 'item';
     div.dataset.key = task.id;
+    if (task.done) div.classList.add('checked');
     div.innerHTML = `
       <div class="item__cb">
         <svg class="item__ck" width="12" height="10" viewBox="0 0 12 10" fill="none">
@@ -848,6 +935,22 @@ function renderEntities() {
     `<div class="entity-tag"><span>${icon}</span>${name}</div>`).join('');
 }
 
+// ─── RENDER TIMELINE ──────────────────────────────────────────────────────────
+function renderTimeline() {
+  const container = document.getElementById('timeline-content');
+  if (!container) return;
+  container.innerHTML = TIMELINE[lang].map(step => `
+    <div class="tl-step tl-step--${step.status}">
+      <div class="tl-step__connector"></div>
+      <div class="tl-step__icon">${step.icon}</div>
+      <div class="tl-step__dot"></div>
+      <div class="tl-step__date">${step.date}</div>
+      <div class="tl-step__title">${step.title}</div>
+      <div class="tl-step__desc">${step.desc}</div>
+    </div>
+  `).join('');
+}
+
 // ─── I18N ─────────────────────────────────────────────────────────────────────
 function applyTranslations() {
   document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -866,6 +969,7 @@ function setLang(l) {
   applyTranslations();
   renderAllChecklists();
   renderGantt();
+  renderTimeline();
   renderArch();
   renderSegments();
   renderEntities();
@@ -888,7 +992,11 @@ function saveState() {
 function loadState() {
   const state = getState();
   document.querySelectorAll('.item[data-key]').forEach(el => {
-    if (state[el.dataset.key]) el.classList.add('checked');
+    const key = el.dataset.key;
+    const isDone = el.classList.contains('checked');
+    const fromStorage = state[key];
+    if (isDone || fromStorage) el.classList.add('checked');
+    else el.classList.remove('checked');
   });
   updateProgress(false);
 }
@@ -981,6 +1089,7 @@ function launchConfetti() {
 applyTranslations();
 renderAllChecklists();
 renderGantt();
+renderTimeline();
 renderArch();
 renderSegments();
 renderEntities();
