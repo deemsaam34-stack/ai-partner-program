@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1xaff — Финансы отдела</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #fafafa;
+  --card: #ffffff;
+  --border: #e5e7eb;
+  --border-strong: #d1d5db;
+  --text: #111827;
+  --text-sec: #6b7280;
+  --text-muted: #9ca3af;
+  --green: #16a34a;
+  --green-bg: #ecfdf5;
+  --red: #dc2626;
+  --red-bg: #fef2f2;
+  --blue: #2563eb;
+  --blue-bg: #eff6ff;
+  --amber: #d97706;
+  --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { min-height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* GATE (password) */
+#gate {
+  position: fixed; inset: 0; background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100;
+}
+#gate.hidden { display: none; }
+.gate-box {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 36px 32px; box-shadow: var(--shadow);
+  min-width: 320px; max-width: 400px;
+}
+.gate-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.gate-sub { font-size: 13px; color: var(--text-sec); margin-bottom: 20px; }
+.gate-input {
+  width: 100%; padding: 10px 12px; font-size: 14px;
+  border: 1px solid var(--border-strong); border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  outline: none; transition: border-color .15s;
+}
+.gate-input:focus { border-color: var(--blue); }
+.gate-btn {
+  margin-top: 12px; width: 100%;
+  padding: 10px; font-size: 14px; font-weight: 600;
+  background: var(--text); color: white;
+  border: none; border-radius: 6px; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+}
+.gate-btn:hover { opacity: .88; }
+.gate-err { margin-top: 12px; font-size: 12px; color: var(--red); min-height: 16px; }
+
+/* APP */
+#app.hidden { display: none; }
+.wrap { max-width: 1200px; margin: 0 auto; padding: 32px 24px 64px; }
+
+header.hdr { margin-bottom: 24px; }
+.hdr-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.hdr-title { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+.hdr-sub { font-size: 12px; color: var(--text-muted); }
+.hdr-meta { display: flex; gap: 16px; margin-top: 8px; font-size: 12px; color: var(--text-sec); }
+.hdr-meta b { color: var(--text); font-weight: 600; }
+
+/* KPI */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px; margin-bottom: 28px;
+}
+.kpi {
+  background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+  padding: 14px 16px; box-shadow: var(--shadow);
+}
+.kpi-label { font-size: 11px; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; font-weight: 600; }
+.kpi-val { font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: -0.02em; }
+.kpi-val.green { color: var(--green); }
+.kpi-val.red { color: var(--red); }
+.kpi-val.blue { color: var(--blue); }
+.kpi-note { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+.kpi.highlight { background: var(--red-bg); border-color: #fecaca; }
+.kpi.highlight-green { background: var(--green-bg); border-color: #bbf7d0; }
+
+/* SECTIONS */
+.section { margin-bottom: 28px; }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+.section-title { font-size: 15px; font-weight: 700; }
+.section-sub { font-size: 12px; color: var(--text-muted); }
+.panel { background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow); }
+.panel-split { display: grid; grid-template-columns: 1fr; gap: 0; }
+@media (min-width: 960px) { .panel-split.has-chart { grid-template-columns: 1.4fr 1fr; } }
+.panel-chart { padding: 16px; border-top: 1px solid var(--border); min-height: 260px; position: relative; }
+@media (min-width: 960px) { .panel-split.has-chart .panel-chart { border-top: none; border-left: 1px solid var(--border); } }
+
+/* TABLE */
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th {
+  text-align: left; padding: 10px 14px; background: #f9fafb;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--text-sec);
+  white-space: nowrap;
+}
+thead th.num { text-align: right; }
+tbody td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: #f9fafb; }
+tbody td.num { text-align: right; font-family: 'JetBrains Mono', monospace; white-space: nowrap; font-size: 12.5px; }
+tbody td.pos { color: var(--green); }
+tbody td.neg { color: var(--red); }
+tbody td.strong { font-weight: 600; }
+tbody td.muted { color: var(--text-sec); }
+.tag { display: inline-block; padding: 1px 7px; border-radius: 4px; font-size: 10.5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; background: #f3f4f6; color: var(--text-sec); }
+.tag.green { background: var(--green-bg); color: var(--green); }
+.tag.red { background: var(--red-bg); color: var(--red); }
+.tag.blue { background: var(--blue-bg); color: var(--blue); }
+
+/* STATUS */
+.status { padding: 16px 18px; font-size: 13px; color: var(--text-sec); text-align: center; }
+.status.err { color: var(--red); }
+
+footer.ftr { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-muted); text-align: center; }
+footer.ftr a { color: var(--text-sec); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<!-- PASSWORD GATE -->
+<div id="gate">
+  <form class="gate-box" onsubmit="event.preventDefault(); checkPassword();">
+    <div class="gate-title">Доступ к дашборду</div>
+    <div class="gate-sub">1xaff — внутренние данные отдела.</div>
+    <input class="gate-input" type="password" id="pw" autocomplete="off" placeholder="Пароль" autofocus>
+    <button class="gate-btn" type="submit">Войти</button>
+    <div class="gate-err" id="gate-err"></div>
+  </form>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+<div class="wrap">
+
+<header class="hdr">
+  <div class="hdr-row">
+    <div>
+      <div class="hdr-title">Affiliate Program Analytics — 1xaff</div>
+      <div class="hdr-sub">Финансовая картина отдела на уровне Deposits и NGR.</div>
+    </div>
+    <div class="hdr-sub mono" id="last-updated">загрузка…</div>
+  </div>
+  <div class="hdr-meta">
+    <div>Партнёров в наших: <b id="m-total">—</b></div>
+    <div>С активностью: <b id="m-active">—</b></div>
+    <div>С NGR &gt; 0: <b id="m-ngr-pos">—</b></div>
+  </div>
+</header>
+
+<div id="status" class="status">Загрузка данных из Google Sheet…</div>
+
+<div id="content" style="display:none">
+
+<!-- KPI GRID -->
+<div class="kpi-grid" id="kpi-grid"></div>
+
+<!-- ПО ВЕРДИКТАМ -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-title">По вердиктам</div>
+    <div class="section-sub">Сортировка: NGR − Spend, убыв.</div>
+  </div>
+  <div class="panel panel-split has-chart">
+    <div class="panel-table"><table id="t-verdicts"><thead><tr>
+      <th>Вердикт</th><th class="num">N</th>
+      <th class="num">Deposits</th><th class="num">NGR</th><th class="num">Spend</th><th class="num">NGR−Spend</th>
+    </tr></thead><tbody></tbody></table></div>
+    <div class="panel-chart"><canvas id="c-verdicts"></canvas></div>
+  </div>
+</div>
+
+<!-- ПО СЕГМЕНТАМ -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-title">По сегментам</div>
+    <div class="section-sub">Сортировка: NGR − Spend, убыв.</div>
+  </div>
+  <div class="panel panel-split has-chart">
+    <div class="panel-table"><table id="t-segments"><thead><tr>
+      <th>Сегмент</th><th class="num">N</th>
+      <th class="num">Deposits</th><th class="num">NGR</th><th class="num">Spend</th><th class="num">NGR−Spend</th>
+    </tr></thead><tbody></tbody></table></div>
+    <div class="panel-chart"><canvas id="c-segments"></canvas></div>
+  </div>
+</div>
+
+<!-- ПО МЕНЕДЖЕРАМ -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-title">По менеджерам</div>
+    <div class="section-sub">Сортировка: NGR − Spend, убыв.</div>
+  </div>
+  <div class="panel">
+    <table id="t-managers"><thead><tr>
+      <th>Менеджер</th><th class="num">N</th>
+      <th class="num">Deposits</th><th class="num">NGR</th><th class="num">Spend</th><th class="num">NGR−Spend</th>
+    </tr></thead><tbody></tbody></table>
+  </div>
+</div>
+
+<!-- ТОП-10 ПРИБЫЛЬНЫХ -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-title">Топ-10 прибыльных (по NGR − Spend)</div>
+  </div>
+  <div class="panel">
+    <table id="t-top-profit"><thead><tr>
+      <th>Username</th><th>Сегмент</th><th>Менеджер</th>
+      <th class="num">Deposits</th><th class="num">NGR</th><th class="num">Spend</th><th class="num">NGR−Spend</th>
+      <th>Вердикт</th>
+    </tr></thead><tbody></tbody></table>
+  </div>
+</div>
+
+<!-- ТОП-10 УБЫТОЧНЫХ -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-title">Топ-10 убыточных (по NGR − Spend)</div>
+  </div>
+  <div class="panel">
+    <table id="t-top-loss"><thead><tr>
+      <th>Username</th><th>Сегмент</th><th>Менеджер</th>
+      <th class="num">Deposits</th><th class="num">NGR</th><th class="num">Spend</th><th class="num">NGR−Spend</th>
+      <th>Вердикт</th>
+    </tr></thead><tbody></tbody></table>
+  </div>
+</div>
+
+</div><!-- /#content -->
+
+<footer class="ftr">
+  1xaff internal · <a href="/">← dmass.site</a> · Период: 01.10.2024 — 21.04.2026
+</footer>
+
+</div></div>
+
+<script>
+// ============ CONFIGURATION ============
+// 1. API key for Google Sheets API v4 (read-only, restricted by HTTP referrer to dmass.site/*)
+const GOOGLE_SHEETS_API_KEY = "__GOOGLE_SHEETS_API_KEY__";
+
+// 2. SHA-256 hex of access password (set via browser console, see SETUP.md)
+const PASSWORD_HASH = "__PASSWORD_HASH__";
+
+// 3. Spreadsheet ID and range (read-only scope)
+const SHEET_ID = "19p4Pvm_R8L7imGhV3CtAL8kMXp-CJJLyvz5xm6MwGdI";
+const RANGE = "Источник!A1:AM1000";
+
+// Column indices (0-based) within the row returned by Sheets API
+const COL = {
+  AFF_ID: 0,     // A
+  USERNAME: 1,   // B
+  SEGMENT: 16,   // Q
+  MANAGER: 18,   // S
+  DEPOSITS: 26,  // AA
+  PERIOD: 31,    // AF
+  VERDICT: 34,   // AI
+  SPEND: 35,     // AJ
+  NGR: 38,       // AM — Company_profit_EUR
+};
+
+const EXCLUDE_VERDICTS = new Set(["НЕ_НАШ", "ПРЕДСТАВИТЕЛИ_ЗАКРЫТЫ", "ПРЕДСТАВИТЕЛИ_ЗАКР.", ""]);
+
+// ============ PASSWORD GATE ============
+const SESSION_KEY = "1xaff_dash_ok";
+
+async function sha256hex(text) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function checkPassword() {
+  const pw = document.getElementById("pw").value;
+  const errEl = document.getElementById("gate-err");
+  errEl.textContent = "";
+  if (!pw) { errEl.textContent = "Введите пароль"; return; }
+  const h = await sha256hex(pw);
+  if (h === PASSWORD_HASH) {
+    sessionStorage.setItem(SESSION_KEY, "1");
+    unlock();
+  } else {
+    errEl.textContent = "Неверный пароль";
+  }
+}
+
+function unlock() {
+  document.getElementById("gate").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+  loadData();
+}
+
+// Auto-unlock if session is valid
+if (sessionStorage.getItem(SESSION_KEY) === "1") {
+  unlock();
+}
+
+// ============ DATA LOADING ============
+async function loadData() {
+  const statusEl = document.getElementById("status");
+  try {
+    if (GOOGLE_SHEETS_API_KEY.startsWith("__")) {
+      throw new Error("API key не установлен. См. SETUP.md шаг 3.");
+    }
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(RANGE)}?key=${GOOGLE_SHEETS_API_KEY}`;
+    const res = await fetch(url);
+    if (!res.ok) {
+      const body = await res.text();
+      throw new Error(`Google Sheets API: ${res.status} ${res.statusText} — ${body.slice(0, 200)}`);
+    }
+    const data = await res.json();
+    const rows = data.values || [];
+    if (rows.length < 2) throw new Error("Пустой ответ от Sheets API");
+    render(rows);
+  } catch (e) {
+    statusEl.className = "status err";
+    statusEl.textContent = "Ошибка: " + e.message;
+  }
+}
+
+// ============ PARSING HELPERS ============
+function toNum(v) {
+  if (v === undefined || v === null) return 0;
+  let s = String(v).trim();
+  if (!s) return 0;
+  s = s.replace(/[€$\s ]/g, "");
+  // Heuristic: if both ',' and '.', '.' is decimal and ',' is thousands
+  if (s.includes(",") && s.includes(".")) {
+    s = s.replace(/,/g, "");
+  } else if (s.includes(",") && !s.includes(".")) {
+    const parts = s.split(",");
+    if (parts.length === 2 && parts[1].length <= 2) {
+      s = parts[0] + "." + parts[1];
+    } else {
+      s = s.replace(/,/g, "");
+    }
+  }
+  const n = parseFloat(s);
+  return isNaN(n) ? 0 : n;
+}
+
+function fmtEur(x, digits = 0) {
+  const sign = x < 0 ? "−" : "";
+  return sign + "€" + Math.abs(x).toLocaleString("en-US", { minimumFractionDigits: digits, maximumFractionDigits: digits }).replace(/,/g, " ");
+}
+
+function fmtPct(n, d) {
+  if (d === 0 || !isFinite(n / d)) return "—";
+  return (100 * n / d).toFixed(1) + "%";
+}
+
+function fmtRatio(n, d) {
+  if (d === 0 || !isFinite(n / d)) return "—";
+  return (n / d).toFixed(2);
+}
+
+function numCell(x, bold = false) {
+  const cls = "num" + (x > 0 ? " pos" : x < 0 ? " neg" : "") + (bold ? " strong" : "");
+  return `<td class="${cls}">${fmtEur(x)}</td>`;
+}
+
+function plainNumCell(x) { return `<td class="num">${fmtEur(x)}</td>`; }
+
+// ============ RENDER ============
+function render(rows) {
+  const headers = rows[0];
+  const data = rows.slice(1);
+
+  // Pre-parse rows
+  const partners = data.map(r => ({
+    aff_id: r[COL.AFF_ID] || "",
+    username: r[COL.USERNAME] || "",
+    segment: r[COL.SEGMENT] || "(пусто)",
+    manager: r[COL.MANAGER] || "(пусто)",
+    deposits: toNum(r[COL.DEPOSITS]),
+    verdict: (r[COL.VERDICT] || "").toString().trim(),
+    spend: toNum(r[COL.SPEND]),
+    ngr: toNum(r[COL.NGR]),
+    period: r[COL.PERIOD] || "",
+  }));
+
+  const ours = partners.filter(p => !EXCLUDE_VERDICTS.has(p.verdict));
+
+  // Period — take the most common non-empty one
+  const periodCounts = {};
+  for (const p of partners) if (p.period) periodCounts[p.period] = (periodCounts[p.period] || 0) + 1;
+  const period = Object.entries(periodCounts).sort((a,b) => b[1]-a[1])[0]?.[0] || "—";
+
+  document.getElementById("last-updated").textContent = "Период: " + period;
+
+  // Totals
+  const sumDep = ours.reduce((s, p) => s + p.deposits, 0);
+  const sumSpend = ours.reduce((s, p) => s + p.spend, 0);
+  const sumNgr = ours.reduce((s, p) => s + p.ngr, 0);
+  const active = ours.filter(p => p.deposits > 0 || p.spend > 0).length;
+  const ngrPos = ours.filter(p => p.ngr > 0).length;
+
+  // Header metrics
+  document.getElementById("m-total").textContent = ours.length;
+  document.getElementById("m-active").textContent = active;
+  document.getElementById("m-ngr-pos").textContent = ngrPos;
+
+  // KPI
+  const trueProfit = sumNgr - sumSpend;
+  const grossProfit = sumDep - sumSpend;
+  const kpiGrid = document.getElementById("kpi-grid");
+  kpiGrid.innerHTML = [
+    ["Наших партнёров", ours.length.toString(), "", ""],
+    ["Σ Deposits", fmtEur(sumDep), "blue", "все партнёры"],
+    ["Σ Spend", fmtEur(sumSpend), "", "комиссии"],
+    ["Σ NGR", fmtEur(sumNgr), "blue", "Company profit"],
+    ["Gross profit (Dep−Spend)", fmtEur(grossProfit), grossProfit >= 0 ? "green" : "red", "уровень Deposits"],
+    ["Настоящий профит (NGR−Spend)", fmtEur(trueProfit), trueProfit >= 0 ? "green" : "red", "★ уровень NGR"],
+    ["% удержания (NGR/Dep)", fmtPct(sumNgr, sumDep), "", ""],
+    ["Реальный ROI (NGR/Spend)", fmtRatio(sumNgr, sumSpend), "", ""],
+  ].map(([label, val, color, note], i) => {
+    const highlight = label.startsWith("Настоящий") ? (trueProfit < 0 ? "highlight" : "highlight-green") : "";
+    return `<div class="kpi ${highlight}"><div class="kpi-label">${label}</div><div class="kpi-val ${color}">${val}</div>${note ? `<div class="kpi-note">${note}</div>` : ""}</div>`;
+  }).join("");
+
+  // Group aggregators
+  function group(keyFn) {
+    const m = new Map();
+    for (const p of ours) {
+      const k = keyFn(p) || "(пусто)";
+      if (!m.has(k)) m.set(k, { n: 0, dep: 0, spend: 0, ngr: 0 });
+      const g = m.get(k);
+      g.n++; g.dep += p.deposits; g.spend += p.spend; g.ngr += p.ngr;
+    }
+    return Array.from(m.entries()).map(([k, v]) => ({ key: k, ...v, net: v.ngr - v.spend }))
+      .sort((a, b) => b.net - a.net);
+  }
+
+  const verdicts = group(p => p.verdict || "(пусто)");
+  const segments = group(p => p.segment);
+  const managers = group(p => p.manager);
+
+  // Verdicts table + chart
+  renderGroupTable("t-verdicts", verdicts);
+  renderBarChart("c-verdicts", verdicts, "NGR − Spend по вердиктам");
+
+  // Segments
+  renderGroupTable("t-segments", segments);
+  renderBarChart("c-segments", segments, "NGR − Spend по сегментам");
+
+  // Managers
+  renderGroupTable("t-managers", managers);
+
+  // Top profit / loss
+  const sortedByNet = ours.slice().sort((a, b) => (b.ngr - b.spend) - (a.ngr - a.spend));
+  renderTopTable("t-top-profit", sortedByNet.slice(0, 10));
+  const losers = sortedByNet.slice().reverse().filter(p => (p.ngr - p.spend) < 0).slice(0, 10);
+  renderTopTable("t-top-loss", losers);
+
+  document.getElementById("status").style.display = "none";
+  document.getElementById("content").style.display = "block";
+}
+
+function renderGroupTable(tableId, groups) {
+  const tbody = document.querySelector(`#${tableId} tbody`);
+  tbody.innerHTML = groups.map(g => `
+    <tr>
+      <td class="strong">${escapeHtml(g.key)}</td>
+      <td class="num">${g.n}</td>
+      ${plainNumCell(g.dep)}
+      ${plainNumCell(g.ngr)}
+      ${plainNumCell(g.spend)}
+      ${numCell(g.net, true)}
+    </tr>
+  `).join("");
+}
+
+function renderTopTable(tableId, partners) {
+  const tbody = document.querySelector(`#${tableId} tbody`);
+  if (!partners.length) { tbody.innerHTML = `<tr><td colspan="8" class="muted" style="text-align:center;padding:16px">Нет данных</td></tr>`; return; }
+  tbody.innerHTML = partners.map(p => {
+    const net = p.ngr - p.spend;
+    const vTag = p.verdict ? `<span class="tag">${escapeHtml(p.verdict)}</span>` : "";
+    return `
+      <tr>
+        <td class="strong">${escapeHtml(p.username)}</td>
+        <td class="muted">${escapeHtml(p.segment)}</td>
+        <td class="muted">${escapeHtml(p.manager)}</td>
+        ${plainNumCell(p.deposits)}
+        ${plainNumCell(p.ngr)}
+        ${plainNumCell(p.spend)}
+        ${numCell(net, true)}
+        <td>${vTag}</td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function renderBarChart(canvasId, groups, title) {
+  const ctx = document.getElementById(canvasId).getContext("2d");
+  const sorted = groups.slice().sort((a, b) => b.net - a.net);
+  const labels = sorted.map(g => g.key.length > 22 ? g.key.slice(0, 20) + "…" : g.key);
+  const values = sorted.map(g => g.net);
+  const colors = values.map(v => v >= 0 ? "rgba(22,163,74,0.85)" : "rgba(220,38,38,0.85)");
+  new Chart(ctx, {
+    type: "bar",
+    data: { labels, datasets: [{ label: "NGR − Spend", data: values, backgroundColor: colors, borderWidth: 0, borderRadius: 3 }] },
+    options: {
+      indexAxis: "y",
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        title: { display: true, text: title, font: { family: "Inter", size: 12, weight: "600" }, color: "#6b7280", padding: { top: 0, bottom: 10 } },
+        tooltip: { callbacks: { label: c => fmtEur(c.parsed.x) } },
+      },
+      scales: {
+        x: { ticks: { font: { family: "JetBrains Mono", size: 10 }, color: "#6b7280", callback: v => v === 0 ? "0" : (Math.abs(v) >= 1000 ? (v/1000).toFixed(0) + "K" : v.toFixed(0)) }, grid: { color: "#f3f4f6" } },
+        y: { ticks: { font: { family: "Inter", size: 11 }, color: "#111827" }, grid: { display: false } },
+      },
+    },
+  });
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+</script>
+</body>
+</html>
